@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organ Donation - Social Welfare Connect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #e83f6f;
+            --secondary-color: #ff7eb9;
+            --accent-color: #ff2d6d;
+            --danger-color: #ff6b6b;
+            --success-color: #28a745;
+            --light-color: #fff5f7;
+            --dark-color: #5a2a3a;
+            --text-color: #4a2a35;
+            --text-light: #a87b8a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fff9fb, #fff0f5);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 20px rgba(232, 63, 111, 0.3);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo i {
+            margin-right: 15px;
+            font-size: 28px;
+        }
+
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(232, 63, 111, 0.1);
+            text-align: center;
+        }
+
+        .hero-image {
+            margin-bottom: 30px;
+        }
+
+        .hero-image img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 20px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 15px 40px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(232, 63, 111, 0.3);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(232, 63, 111, 0.4);
+        }
+
+        .info-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(232, 63, 111, 0.1);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .info-card {
+            background: var(--light-color);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .info-card h3 {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .info-card p {
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .organs-section {
+            margin-bottom: 40px;
+        }
+
+        .organs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .organ-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(232, 63, 111, 0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--secondary-color);
+        }
+
+        .organ-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(232, 63, 111, 0.2);
+        }
+
+        .organ-icon {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 15px;
+        }
+
+        .organ-card h4 {
+            color: var(--dark-color);
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .organ-card p {
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .organ-stats {
+            display: flex;
+            justify-content: space-around;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .process-section {
+            margin-bottom: 40px;
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .step-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(232, 63, 111, 0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--secondary-color);
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(232, 63, 111, 0.2);
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 15px;
+        }
+
+        .step-card h4 {
+            color: var(--dark-color);
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .step-card p {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .myths-section {
+            margin-bottom: 40px;
+        }
+
+        .myths-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .myth-card {
+            background: var(--light-color);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid var(--danger-color);
+        }
+
+        .myth-card h4 {
+            color: var(--danger-color);
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .myth-card p {
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .stats-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .organs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .process-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .myths-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .hero-section,
+            .info-section {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="about.html" class="logo">
+                <i class="fas fa-hands-helping"></i>
+                <span>Social Welfare Connect</span>
+            </a>
+            <a href="home.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Back to Home
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-image">
+                <img src="https://img.freepik.com/free-vector/organ-donation-concept-illustration_114360-4759.jpg?w=400&t=st=1703123456~exp=1703124056~hmac=1234567890abcdef" alt="Organ Donation">
+            </div>
+            <h1 class="hero-title">Organ Donation</h1>
+            <p class="hero-subtitle">Give the ultimate gift of life. Your organs can save multiple lives and give hope to those waiting for transplants.</p>
+            <a href="organdonor.html" class="cta-btn">Register as Organ Donor</a>
+        </div>
+
+        <div class="info-section">
+            <h2 class="section-title">Why Organ Donation Matters</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3><i class="fas fa-heart"></i> Life-Saving Impact</h3>
+                    <p>One organ donor can save up to 8 lives through organ donation and enhance the lives of up to 75 people through tissue donation. Your decision to donate can give someone a second chance at life.</p>
+                </div>
+                <div class="info-card">
+                    <h3><i class="fas fa-clock"></i> Critical Need</h3>
+                    <p>Every 10 minutes, someone is added to the national transplant waiting list. Currently, over 100,000 people are waiting for life-saving organ transplants, and 17 people die each day waiting.</p>
+                </div>
+                <div class="info-card">
+                    <h3><i class="fas fa-shield-alt"></i> Safe & Regulated</h3>
+                    <p>Organ donation is a highly regulated medical process. All potential donors are thoroughly evaluated, and the process follows strict medical and ethical guidelines to ensure safety and respect.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section organs-section">
+            <h2 class="section-title">Organs That Can Be Donated</h2>
+            <div class="organs-grid">
+                <div class="organ-card">
+                    <div class="organ-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h4>Heart</h4>
+                    <p>Can save the life of someone with end-stage heart failure.</p>
+                    <div class="organ-stats">
+                        <span>Waiting: 3,500+</span>
+                        <span>Transplants: 3,800/year</span>
+                    </div>
+                </div>
+                <div class="organ-card">
+                    <div class="organ-icon">
+                        <i class="fas fa-lungs"></i>
+                    </div>
+                    <h4>Lungs</h4>
+                    <p>Can be donated as a pair or individually to help breathing.</p>
+                    <div class="organ-stats">
+                        <span>Waiting: 1,000+</span>
+                        <span>Transplants: 2,500/year</span>
+                    </div>
+                </div>
+                <div class="organ-card">
+                    <div class="organ-icon">
+                        <i class="fas fa-liver"></i>
+                    </div>
+                    <h4>Liver</h4>
+                    <p>Can be split between two recipients, saving multiple lives.</p>
+                    <div class="organ-stats">
+                        <span>Waiting: 12,000+</span>
+                        <span>Transplants: 8,900/year</span>
+                    </div>
+                </div>
+                <div class="organ-card">
+                    <div class="organ-icon">
+                        <i class="fas fa-kidney"></i>
+                    </div>
+                    <h4>Kidneys</h4>
+                    <p>Most commonly needed organ, can be donated while living.</p>
+                    <div class="organ-stats">
+                        <span>Waiting: 90,000+</span>
+                        <span>Transplants: 23,000/year</span>
+                    </div>
+                </div>
+                <div class="organ-card">
+                    <div class="organ-icon">
+                        <i class="fas fa-pancreas"></i>
+                    </div>
+                    <h4>Pancreas</h4>
+                    <p>Can help diabetics by restoring insulin production.</p>
+                    <div class="organ-stats">
+                        <span>Waiting: 1,200+</span>
+                        <span>Transplants: 900/year</span>
+                    </div>
+                </div>
+                <div class="organ-card">
+                    <div class="organ-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h4>Eyes</h4>
+                    <p>Corneas can restore sight to the blind.</p>
+                    <div class="organ-stats">
+                        <span>Waiting: 12,000+</span>
+                        <span>Transplants: 50,000/year</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section process-section">
+            <h2 class="section-title">Donation Process</h2>
+            <div class="process-steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h4>Registration</h4>
+                    <p>Register as an organ donor through your state's donor registry or when getting your driver's license.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h4>Medical Evaluation</h4>
+                    <p>When donation becomes possible, medical professionals evaluate your organs for suitability.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h4>Matching</h4>
+                    <p>Organs are matched with recipients based on blood type, size, medical urgency, and location.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h4>Transplantation</h4>
+                    <p>Organs are transplanted to recipients, giving them a new chance at life.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section myths-section">
+            <h2 class="section-title">Common Myths & Facts</h2>
+            <div class="myths-grid">
+                <div class="myth-card">
+                    <h4>Myth: Doctors won't try to save my life if I'm a donor</h4>
+                    <p><strong>Fact:</strong> Medical professionals are legally and ethically bound to save your life first. Organ donation is only considered after all efforts to save your life have failed and brain death has been declared.</p>
+                </div>
+                <div class="myth-card">
+                    <h4>Myth: I'm too old to donate</h4>
+                    <p><strong>Fact:</strong> There's no age limit for organ donation. The decision is based on the health and condition of your organs, not your age. Many donors are in their 70s and 80s.</p>
+                </div>
+                <div class="myth-card">
+                    <h4>Myth: My family will have to pay for the donation</h4>
+                    <p><strong>Fact:</strong> There is no cost to the donor's family for organ donation. All costs related to donation are covered by the transplant recipient's insurance or the transplant center.</p>
+                </div>
+                <div class="myth-card">
+                    <h4>Myth: I can't have an open-casket funeral</h4>
+                    <p><strong>Fact:</strong> Organ donation doesn't interfere with traditional funeral arrangements, including open-casket services. The body is treated with respect and dignity throughout the process.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <h2 style="color: white; margin-bottom: 30px;">Organ Donation Impact</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">100,000+</div>
+                    <div class="stat-label">People Waiting</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">17</div>
+                    <div class="stat-label">Deaths Daily Waiting</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Lives Saved Per Donor</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">40,000+</div>
+                    <div class="stat-label">Transplants Annually</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add any interactive functionality here if needed
+            console.log('Organ Donation page loaded');
+        });
+    </script>
+</body>
+</html>

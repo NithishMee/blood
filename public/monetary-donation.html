@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monetary Donation - Social Welfare Connect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #e83f6f;
+            --secondary-color: #ff7eb9;
+            --accent-color: #ff2d6d;
+            --danger-color: #ff6b6b;
+            --success-color: #28a745;
+            --light-color: #fff5f7;
+            --dark-color: #5a2a3a;
+            --text-color: #4a2a35;
+            --text-light: #a87b8a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fff9fb, #fff0f5);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 20px rgba(232, 63, 111, 0.3);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo i {
+            margin-right: 15px;
+            font-size: 28px;
+        }
+
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .hero-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(232, 63, 111, 0.1);
+            text-align: center;
+        }
+
+        .hero-image {
+            margin-bottom: 30px;
+        }
+
+        .hero-image img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 20px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 15px 40px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(232, 63, 111, 0.3);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(232, 63, 111, 0.4);
+        }
+
+        .info-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(232, 63, 111, 0.1);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .info-card {
+            background: var(--light-color);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .info-card h3 {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .info-card p {
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .causes-section {
+            margin-bottom: 40px;
+        }
+
+        .causes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .cause-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(232, 63, 111, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .cause-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(232, 63, 111, 0.2);
+        }
+
+        .cause-icon {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 20px auto 15px;
+        }
+
+        .cause-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .cause-card h4 {
+            color: var(--dark-color);
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .cause-card p {
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .cause-amount {
+            background: var(--light-color);
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .payment-section {
+            margin-bottom: 40px;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .payment-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(232, 63, 111, 0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--secondary-color);
+        }
+
+        .payment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(232, 63, 111, 0.2);
+        }
+
+        .payment-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .payment-card h4 {
+            color: var(--dark-color);
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .payment-card p {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .security-section {
+            margin-bottom: 40px;
+        }
+
+        .security-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .security-feature {
+            background: var(--light-color);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid var(--success-color);
+        }
+
+        .security-feature h4 {
+            color: var(--success-color);
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .security-feature p {
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .impact-section {
+            margin-bottom: 40px;
+        }
+
+        .impact-stories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .story-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(232, 63, 111, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .story-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(232, 63, 111, 0.2);
+        }
+
+        .story-quote {
+            font-style: italic;
+            color: var(--text-color);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .story-author {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .stats-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .causes-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
+
+            .security-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .impact-stories {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .hero-section,
+            .info-section {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="about.html" class="logo">
+                <i class="fas fa-hands-helping"></i>
+                <span>Social Welfare Connect</span>
+            </a>
+            <a href="home.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Back to Home
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-image">
+                <img src="https://img.freepik.com/free-vector/money-donation-concept-illustration_114360-4760.jpg?w=400&t=st=1703123456~exp=1703124056~hmac=1234567890abcdef" alt="Monetary Donation">
+            </div>
+            <h1 class="hero-title">Monetary Donation</h1>
+            <p class="hero-subtitle">Your financial contribution can make a real difference in someone's life. Every rupee counts towards creating positive change.</p>
+            <a href="moneydonor.html" class="cta-btn">Donate Now</a>
+        </div>
+
+        <div class="info-section">
+            <h2 class="section-title">Why Monetary Donations Matter</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3><i class="fas fa-hand-holding-heart"></i> Immediate Impact</h3>
+                    <p>Financial donations provide immediate resources to help people in crisis situations, fund medical treatments, support education, and provide emergency relief when it's needed most.</p>
+                </div>
+                <div class="info-card">
+                    <h3><i class="fas fa-chart-line"></i> Sustainable Change</h3>
+                    <p>Your donations help build long-term solutions, fund community programs, and create lasting infrastructure that continues to benefit people long after your initial contribution.</p>
+                </div>
+                <div class="info-card">
+                    <h3><i class="fas fa-users"></i> Community Support</h3>
+                    <p>Monetary donations enable us to reach more people, provide better services, and create stronger support networks within communities that need it most.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section causes-section">
+            <h2 class="section-title">Causes You Can Support</h2>
+            <div class="causes-grid">
+                <div class="cause-card">
+                    <div class="cause-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <div class="cause-content">
+                        <h4>Medical Emergency Fund</h4>
+                        <p>Help families facing medical emergencies with treatment costs, surgeries, and rehabilitation expenses.</p>
+                        <div class="cause-amount">₹5,000 - ₹50,000</div>
+                    </div>
+                </div>
+                <div class="cause-card">
+                    <div class="cause-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="cause-content">
+                        <h4>Education Support</h4>
+                        <p>Provide scholarships, school supplies, and educational resources to underprivileged children.</p>
+                        <div class="cause-amount">₹1,000 - ₹25,000</div>
+                    </div>
+                </div>
+                <div class="cause-card">
+                    <div class="cause-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="cause-content">
+                        <h4>Housing Assistance</h4>
+                        <p>Support families in need of housing repairs, rent assistance, or emergency shelter.</p>
+                        <div class="cause-amount">₹10,000 - ₹1,00,000</div>
+                    </div>
+                </div>
+                <div class="cause-card">
+                    <div class="cause-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <div class="cause-content">
+                        <h4>Food Security</h4>
+                        <p>Help provide nutritious meals, food packages, and support community feeding programs.</p>
+                        <div class="cause-amount">₹500 - ₹10,000</div>
+                    </div>
+                </div>
+                <div class="cause-card">
+                    <div class="cause-icon">
+                        <i class="fas fa-briefcase-medical"></i>
+                    </div>
+                    <div class="cause-content">
+                        <h4>Healthcare Access</h4>
+                        <p>Fund medical camps, health check-ups, and provide access to essential healthcare services.</p>
+                        <div class="cause-amount">₹2,000 - ₹30,000</div>
+                    </div>
+                </div>
+                <div class="cause-card">
+                    <div class="cause-icon">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <div class="cause-content">
+                        <h4>Disaster Relief</h4>
+                        <p>Support emergency response efforts during natural disasters and humanitarian crises.</p>
+                        <div class="cause-amount">₹1,000 - ₹50,000</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section payment-section">
+            <h2 class="section-title">Secure Payment Methods</h2>
+            <div class="payment-methods">
+                <div class="payment-card">
+                    <div class="payment-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <h4>Credit/Debit Cards</h4>
+                    <p>Secure payment processing with all major credit and debit cards. Your information is protected with bank-level security.</p>
+                </div>
+                <div class="payment-card">
+                    <div class="payment-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h4>UPI Payments</h4>
+                    <p>Quick and easy payments using UPI apps like Google Pay, PhonePe, Paytm, and other UPI-enabled apps.</p>
+                </div>
+                <div class="payment-card">
+                    <div class="payment-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <h4>Net Banking</h4>
+                    <p>Direct bank transfers through secure net banking portals. Support for all major Indian banks.</p>
+                </div>
+                <div class="payment-card">
+                    <div class="payment-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <h4>Digital Wallets</h4>
+                    <p>Convenient payments through popular digital wallets and payment apps for seamless transactions.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section security-section">
+            <h2 class="section-title">Security & Transparency</h2>
+            <div class="security-grid">
+                <div class="security-feature">
+                    <h4><i class="fas fa-shield-alt"></i> Secure Transactions</h4>
+                    <p>All donations are processed through PCI DSS compliant payment gateways with 256-bit SSL encryption to ensure your financial information is completely secure.</p>
+                </div>
+                <div class="security-feature">
+                    <h4><i class="fas fa-eye"></i> Complete Transparency</h4>
+                    <p>We provide detailed reports on how your donations are used, including impact stories, financial statements, and progress updates on funded projects.</p>
+                </div>
+                <div class="security-feature">
+                    <h4><i class="fas fa-receipt"></i> Tax Benefits</h4>
+                    <p>All donations are eligible for tax deductions under Section 80G of the Income Tax Act. You'll receive a tax receipt for every contribution.</p>
+                </div>
+                <div class="security-feature">
+                    <h4><i class="fas fa-chart-bar"></i> Impact Tracking</h4>
+                    <p>Track the impact of your donation with regular updates, photos, and stories showing how your contribution is making a difference.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section impact-section">
+            <h2 class="section-title">Stories of Impact</h2>
+            <div class="impact-stories">
+                <div class="story-card">
+                    <div class="story-quote">"Your donation helped my daughter get the heart surgery she desperately needed. Today she's healthy and back in school. Thank you for giving us hope."</div>
+                    <div class="story-author">- Priya's Mother, Medical Emergency Fund Recipient</div>
+                </div>
+                <div class="story-card">
+                    <div class="story-quote">"The scholarship I received changed my life. I'm now studying engineering and will be the first in my family to graduate from college."</div>
+                    <div class="story-author">- Rahul, Education Support Recipient</div>
+                </div>
+                <div class="story-card">
+                    <div class="story-quote">"When our house was damaged in the flood, your donations helped us rebuild. We're forever grateful for the support during our darkest time."</div>
+                    <div class="story-author">- The Sharma Family, Disaster Relief Recipients</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <h2 style="color: white; margin-bottom: 30px;">Donation Impact</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">₹2.5Cr+</div>
+                    <div class="stat-label">Total Donations</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">15,000+</div>
+                    <div class="stat-label">Lives Impacted</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Projects Funded</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Transparent</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add any interactive functionality here if needed
+            console.log('Monetary Donation page loaded');
+        });
+    </script>
+</body>
+</html>
+
+

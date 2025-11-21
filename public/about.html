@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Social Welfare Connect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #e83f6f;
+            --secondary-color: #ff7eb9;
+            --accent-color: #ff2d6d;
+            --danger-color: #ff6b6b;
+            --success-color: #28a745;
+            --light-color: #fff5f7;
+            --dark-color: #5a2a3a;
+            --text-color: #4a2a35;
+            --text-light: #a87b8a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fff9fb, #fff0f5);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 20px rgba(232, 63, 111, 0.3);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo i {
+            margin-right: 15px;
+            font-size: 28px;
+        }
+
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        /* Home icon (top-right) */
+        .home-icon {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(232, 63, 111, 0.3);
+        }
+        .home-icon i { font-size: 18px; }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .about-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(232, 63, 111, 0.1);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-color);
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+        }
+
+        .about-image {
+            text-align: center;
+        }
+
+        .about-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(232, 63, 111, 0.2);
+        }
+
+        .mission-vision {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .mission-card, .vision-card {
+            background: linear-gradient(135deg, var(--light-color), #fff);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            border-left: 4px solid var(--primary-color);
+            box-shadow: 0 5px 20px rgba(232, 63, 111, 0.1);
+        }
+
+        .mission-card h3, .vision-card h3 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+                 .mission-card p, .vision-card p {
+             color: var(--text-color);
+             line-height: 1.6;
+         }
+
+         .services-section {
+             margin-bottom: 40px;
+         }
+
+         .services-grid {
+             display: grid;
+             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+             gap: 30px;
+             margin-top: 30px;
+         }
+
+         .service-card {
+             background: white;
+             border-radius: 20px;
+             padding: 30px;
+             text-align: center;
+             box-shadow: 0 10px 30px rgba(232, 63, 111, 0.1);
+             transition: all 0.3s ease;
+             border-top: 4px solid var(--primary-color);
+         }
+
+         .service-card:hover {
+             transform: translateY(-10px);
+             box-shadow: 0 20px 40px rgba(232, 63, 111, 0.2);
+         }
+
+         .service-icon {
+             margin-bottom: 20px;
+         }
+
+         .service-icon img {
+             width: 120px;
+             height: 120px;
+             object-fit: cover;
+             border-radius: 15px;
+         }
+
+         .service-card h3 {
+             font-size: 1.5rem;
+             color: var(--dark-color);
+             margin-bottom: 15px;
+             font-weight: 700;
+         }
+
+         .service-card p {
+             color: var(--text-light);
+             line-height: 1.6;
+             margin-bottom: 25px;
+         }
+
+         .learn-more-btn {
+             display: inline-block;
+             background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+             color: white;
+             padding: 12px 30px;
+             border-radius: 25px;
+             text-decoration: none;
+             font-weight: 600;
+             transition: all 0.3s ease;
+             box-shadow: 0 4px 15px rgba(232, 63, 111, 0.3);
+         }
+
+         .learn-more-btn:hover {
+             transform: translateY(-2px);
+             box-shadow: 0 8px 25px rgba(232, 63, 111, 0.4);
+         }
+
+        .values-section {
+            margin-bottom: 40px;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .value-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(232, 63, 111, 0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--secondary-color);
+        }
+
+        .value-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(232, 63, 111, 0.2);
+        }
+
+        .value-card i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .value-card h4 {
+            font-size: 1.3rem;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .value-card p {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .team-section {
+            margin-bottom: 40px;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .team-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(232, 63, 111, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(232, 63, 111, 0.2);
+        }
+
+        .team-photo {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .team-info {
+            padding: 25px;
+            text-align: center;
+        }
+
+        .team-name {
+            font-size: 1.3rem;
+            color: var(--dark-color);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .team-role {
+            color: var(--primary-color);
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .team-description {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .stats-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .contact-section {
+            text-align: center;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(232, 63, 111, 0.1);
+        }
+
+        .contact-item i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .contact-details h4 {
+            color: var(--dark-color);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .contact-details p {
+            color: var(--text-light);
+        }
+
+        @media (max-width: 768px) {
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+                         .mission-vision {
+                 grid-template-columns: 1fr;
+                 gap: 20px;
+             }
+
+             .services-grid {
+                 grid-template-columns: 1fr;
+             }
+
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .about-section {
+                padding: 25px 20px;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="home.html" class="logo">
+                <i class="fas fa-hands-helping"></i>
+                <span>Social Welfare Connect</span>
+            </a>
+            <a href="home.html" class="home-icon" title="Home"><i class="fas fa-home"></i></a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="about-section">
+            <h1 class="section-title">About Us</h1>
+            
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Social Welfare Connect is a comprehensive platform dedicated to bridging the gap between donors and recipients in the realm of social welfare. We believe that every act of kindness, no matter how small, has the power to create meaningful change in someone's life.</p>
+                    
+                    <p>Founded with the vision of creating a more connected and compassionate society, our platform facilitates various types of donations including blood donation, organ donation, and monetary contributions. We work tirelessly to ensure that help reaches those who need it most, when they need it most.</p>
+                    
+                    <p>Our team consists of passionate individuals committed to leveraging technology for social good. We understand that the journey of giving and receiving is deeply personal, and we strive to make this process as seamless, secure, and meaningful as possible.</p>
+                </div>
+                                 <div class="about-image">
+                     <img src="https://img.freepik.com/free-vector/team-volunteers-helping-people_23-2148866843.jpg?w=740&t=st=1703123456~exp=1703124056~hmac=1234567890abcdef" alt="Social Welfare Connect Team">
+                 </div>
+            </div>
+
+                         <div class="mission-vision">
+                 <div class="mission-card">
+                     <h3><i class="fas fa-bullseye"></i> Our Mission</h3>
+                     <p>To create a world where no one has to face their challenges alone. We connect compassionate donors with those in need, making the act of giving and receiving help accessible, transparent, and impactful.</p>
+                 </div>
+                 <div class="vision-card">
+                     <h3><i class="fas fa-eye"></i> Our Vision</h3>
+                     <p>To build a global community where kindness knows no boundaries, and every individual has the opportunity to make a positive difference in someone's life through our innovative platform.</p>
+                 </div>
+             </div>
+
+             <div class="services-section">
+                 <h2 class="section-title">Our Services</h2>
+                 <div class="services-grid">
+                     <div class="service-card">
+                         <div class="service-icon">
+                             <img src="https://img.freepik.com/free-vector/blood-donation-concept-illustration_114360-4758.jpg?w=400&t=st=1703123456~exp=1703124056~hmac=1234567890abcdef" alt="Blood Donation">
+                         </div>
+                         <h3>Blood Donation</h3>
+                         <p>Connect blood donors with recipients in need. Our platform ensures safe, timely, and efficient blood donation processes.</p>
+                         <a href="blood-donation.html" class="learn-more-btn">Learn More</a>
+                     </div>
+                     <div class="service-card">
+                         <div class="service-icon">
+                             <img src="https://img.freepik.com/free-vector/organ-donation-concept-illustration_114360-4759.jpg?w=400&t=st=1703123456~exp=1703124056~hmac=1234567890abcdef" alt="Organ Donation">
+                         </div>
+                         <h3>Organ Donation</h3>
+                         <p>Facilitate organ donation registrations and connect donors with medical institutions for life-saving transplants.</p>
+                         <a href="organ-donation.html" class="learn-more-btn">Learn More</a>
+                     </div>
+                     <div class="service-card">
+                         <div class="service-icon">
+                             <img src="https://img.freepik.com/free-vector/money-donation-concept-illustration_114360-4760.jpg?w=400&t=st=1703123456~exp=1703124056~hmac=1234567890abcdef" alt="Monetary Donation">
+                         </div>
+                         <h3>Monetary Donation</h3>
+                         <p>Enable secure financial contributions to support various social welfare initiatives and emergency relief efforts.</p>
+                         <a href="monetary-donation.html" class="learn-more-btn">Learn More</a>
+                     </div>
+                 </div>
+             </div>
+
+            <div class="values-section">
+                <h2 class="section-title">Our Values</h2>
+                <div class="values-grid">
+                    <div class="value-card">
+                        <i class="fas fa-heart"></i>
+                        <h4>Compassion</h4>
+                        <p>We approach every interaction with empathy and understanding, recognizing the humanity in every individual.</p>
+                    </div>
+                    <div class="value-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h4>Trust</h4>
+                        <p>We maintain the highest standards of security and transparency to build lasting trust with our community.</p>
+                    </div>
+                    <div class="value-card">
+                        <i class="fas fa-users"></i>
+                        <h4>Community</h4>
+                        <p>We believe in the power of collective action and foster a supportive environment for all our users.</p>
+                    </div>
+                    <div class="value-card">
+                        <i class="fas fa-lightbulb"></i>
+                        <h4>Innovation</h4>
+                        <p>We continuously evolve our platform to better serve the needs of our community and maximize impact.</p>
+                    </div>
+                    <div class="value-card">
+                        <i class="fas fa-balance-scale"></i>
+                        <h4>Equity</h4>
+                        <p>We ensure equal access to our services, treating every individual with dignity and respect.</p>
+                    </div>
+                    <div class="value-card">
+                        <i class="fas fa-star"></i>
+                        <h4>Excellence</h4>
+                        <p>We strive for excellence in everything we do, from user experience to service delivery.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-section">
+                <h2 style="color: white; margin-bottom: 30px;">Our Impact</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">10,000+</div>
+                        <div class="stat-label">Lives Impacted</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">5,000+</div>
+                        <div class="stat-label">Successful Donations</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Partner Organizations</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Secure Platform</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="team-section">
+                <h2 class="section-title">Our Team</h2>
+                <div class="team-grid">
+                    <div class="team-card">
+                        <div class="team-photo">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="team-info">
+                            <h3 class="team-name">Sarah Johnson</h3>
+                            <p class="team-role">Founder & CEO</p>
+                            <p class="team-description">Passionate about leveraging technology for social impact with over 10 years of experience in the non-profit sector.</p>
+                        </div>
+                    </div>
+                    <div class="team-card">
+                        <div class="team-photo">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="team-info">
+                            <h3 class="team-name">Michael Chen</h3>
+                            <p class="team-role">CTO</p>
+                            <p class="team-description">Expert in building secure, scalable platforms with a focus on user experience and accessibility.</p>
+                        </div>
+                    </div>
+                    <div class="team-card">
+                        <div class="team-photo">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="team-info">
+                            <h3 class="team-name">Dr. Emily Rodriguez</h3>
+                            <p class="team-role">Medical Director</p>
+                            <p class="team-description">Leading medical professional ensuring the highest standards in blood and organ donation processes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-section">
+                <h2 class="section-title">Get in Touch</h2>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div class="contact-details">
+                            <h4>Address</h4>
+                            <p>123 Helping Street, Compassion City, CC 12345</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div class="contact-details">
+                            <h4>Phone</h4>
+                            <p>+1 (555) 123-4567</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div class="contact-details">
+                            <h4>Email</h4>
+                            <p>info@socialwelfareconnect.org</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <div class="contact-details">
+                            <h4>Hours</h4>
+                            <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add any interactive functionality here if needed
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

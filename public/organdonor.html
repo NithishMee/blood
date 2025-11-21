@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organ Donation - Social Welfare Connect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        :root {
+            --primary-color: #e83f6f;
+            --secondary-color: #ff7eb9;
+            --accent-color: #ff2d6d;
+            --danger-color: #ff6b6b;
+            --success-color: #ff85a2;
+            --light-color: #fff5f7;
+            --dark-color: #5a2a3a;
+            --text-color: #4a2a35;
+            --text-light: #a87b8a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #fff5f7;
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-button-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(232, 63, 111, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 6px 20px rgba(232, 63, 111, 0.4);
+        }
+
+        .container {
+            max-width: 1400px;
+            width: 90%;
+            margin: 40px auto;
+            padding: 0 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .content {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+            width: 100%;
+        }
+
+        .form-container, .map-container {
+            width: 600px;
+            min-height: 650px;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(232, 63, 111, 0.15);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-container:hover, .map-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(232, 63, 111, 0.2);
+        }
+
+        .form-container h2, .map-container h2 {
+            margin-bottom: 30px;
+            font-weight: 700;
+            color: var(--dark-color);
+            position: relative;
+            display: inline-block;
+            font-size: 28px;
+        }
+
+        .form-container h2::after, .map-container h2::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            width: 70px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+
+        input, select {
+            display: block;
+            width: 100%;
+            margin-bottom: 25px;
+            padding: 16px;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 4px rgba(255, 45, 109, 0.2);
+        }
+
+        .locked-input {
+            background: #f5f7fa;
+            color: #6c6f7d;
+            cursor: not-allowed;
+        }
+
+        .locked-input:focus {
+            border-color: #e9ecef;
+            box-shadow: none;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 18px 35px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #e83f6f, #ff2d6d);
+            color: white;
+            box-shadow: 0 10px 30px rgba(232, 63, 111, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(232, 63, 111, 0.4);
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+            min-height: 550px;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            flex-grow: 1;
+        }
+
+        input[type="file"] {
+            padding: 12px;
+            border: 1px dashed #ddd;
+            background-color: #fff9fb;
+        }
+
+        input[type="file"]::file-selector-button {
+            padding: 10px 18px;
+            background: linear-gradient(135deg, #ff7eb9, #e83f6f);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-right: 12px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background: linear-gradient(135deg, #e83f6f, #ff2d6d);
+        }
+
+        @media (max-width: 1200px) {
+            .content {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .form-container, .map-container {
+                width: 80%;
+                min-height: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-container, .map-container {
+                width: 100%;
+                padding: 30px;
+            }
+            
+            .container {
+                padding: 0 15px;
+                margin: 20px auto;
+            }
+            
+            .form-container h2, .map-container h2 {
+                font-size: 24px;
+            }
+            
+            input, select {
+                padding: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="back-button-container">
+        <a href="home.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            Back to Home
+        </a>
+    </div>
+    <div class="container">
+        <div class="content">
+            <div class="form-container">
+                <h2>Register as an Organ Donor</h2>
+                <form id="donorForm">
+                    <input type="text" id="name" placeholder="Full Name" required>
+                    <input type="tel" id="phone" pattern="[0-9]{10}" placeholder="Phone Number (10 digits)" required>
+                    <select id="organType" required>
+                        <option value="">Select Organ Type</option>
+                        <option value="Kidney">Kidney</option>
+                        <option value="Liver">Liver</option>
+                        <option value="Heart">Heart</option>
+                        <option value="Lungs">Lungs</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <select id="conditionStatus" required>
+                        <option value="">Organ Condition Status</option>
+                        <option value="Healthy">Healthy</option>
+                        <option value="Pending Evaluation">Pending Evaluation</option>
+                        <option value="Deceased Donor">Deceased Donor</option>
+                    </select>
+                    <input type="file" id="verificationFile" required>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-heart"></i> Register as Donor
+                    </button>
+                </form>
+            </div>
+            <div class="map-container">
+                <h2>Available Organ Donors</h2>
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        let currentUser = null;
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            const userData = localStorage.getItem('currentUser');
+            if (!userData) {
+                alert('Please login to register as a donor.');
+                window.location.href = 'login.html';
+                return;
+            }
+            currentUser = JSON.parse(userData);
+            document.getElementById('name').value = currentUser.name;
+            const phoneInput = document.getElementById('phone');
+            if (phoneInput) {
+                phoneInput.value = currentUser.phone;
+                phoneInput.readOnly = true;
+                phoneInput.classList.add('locked-input');
+                phoneInput.title = 'Phone number is locked to your registered account';
+            }
+            
+            var map = L.map('map').setView([13.0827, 80.2707], 10);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 18,
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+    
+            fetch('/api/organ-donors')
+                .then(response => response.json())
+                .then(donors => {
+                    donors.forEach(donor => {
+                        L.marker([donor.latitude, donor.longitude]).addTo(map)
+                            .bindPopup(`<b>${donor.name}</b><br>Phone: ${donor.phone}<br>Organ: ${donor.organType}<br>Status: ${donor.conditionStatus}`);
+                    });
+                });
+    
+            document.getElementById('donorForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+    
+                var name = document.getElementById('name').value.trim();
+                var phone = document.getElementById('phone').value.trim();
+                var organType = document.getElementById('organType').value;
+                var conditionStatus = document.getElementById('conditionStatus').value;
+                var verificationFile = document.getElementById('verificationFile').files[0];
+    
+                if (!name) return alert("Please enter your full name.");
+                if (!phone || !/^\d{10}$/.test(phone)) return alert("Please enter a valid 10-digit phone number.");
+                if (currentUser && phone !== currentUser.phone) {
+                    alert("Please use your registered phone number.");
+                    return;
+                }
+                if (!organType) return alert("Please select an organ type.");
+                if (!conditionStatus) return alert("Please select the organ condition status.");
+                if (!verificationFile) return alert("Please upload a donor verification file.");
+    
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var latitude = position.coords.latitude;
+                    var longitude = position.coords.longitude;
+    
+                    const requestBody = { name, phone, organType, conditionStatus, latitude, longitude };
+                    
+                    // Add user ID if signed in
+                    if (currentUser) {
+                        requestBody.userId = currentUser._id;
+                    }
+                    
+                    fetch('/api/organ-donor', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(requestBody)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        L.marker([latitude, longitude]).addTo(map)
+                            .bindPopup(`<b>${name}</b><br>Phone: ${phone}<br>Organ: ${organType}<br>Status: ${conditionStatus}`)
+                            .openPopup();
+                        map.setView([latitude, longitude], 15);
+                        alert(data.message);
+                        this.reset();
+                    })
+                    .catch(error => alert("Error: " + error.message));
+                }, function(error) {
+                    alert("Geolocation failed: " + error.message);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

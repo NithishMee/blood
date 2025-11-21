@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Donor Map</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        :root {
+            --primary-color: #e83f6f;
+            --secondary-color: #ff7eb9;
+            --accent-color: #ff2d6d;
+            --danger-color: #ff6b6b;
+            --success-color: #ff85a2;
+            --light-color: #fff5f7;
+            --dark-color: #5a2a3a;
+            --text-color: #4a2a35;
+            --text-light: #a87b8a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #fff5f7;
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-button-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(232, 63, 111, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 6px 20px rgba(232, 63, 111, 0.4);
+        }
+
+        /* Home icon (top-right) */
+        .home-icon {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(232, 63, 111, 0.3);
+        }
+        .home-icon i { font-size: 18px; }
+
+        /* Map-only layout after submit */
+        .map-only .content {
+            display: block;
+        }
+        .map-only .map-container {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 auto !important;
+            min-height: calc(100vh - 120px);
+        }
+        .map-only #map {
+            height: 70vh !important;
+            min-height: 500px !important;
+        }
+
+        .container {
+            max-width: 1400px;
+            width: 90%;
+            margin: 40px auto;
+            padding: 0 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .content {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+            width: 100%;
+        }
+
+        .form-container, .map-container {
+            width: 600px;
+            min-height: 650px;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(232, 63, 111, 0.15);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-container:hover, .map-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(232, 63, 111, 0.2);
+        }
+
+        .form-container h2, .map-container h2 {
+            margin-bottom: 30px;
+            font-weight: 700;
+            color: var(--dark-color);
+            position: relative;
+            display: inline-block;
+            font-size: 28px;
+        }
+
+        .form-container h2::after, .map-container h2::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            width: 70px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+
+        input, select {
+            display: block;
+            width: 100%;
+            margin-bottom: 25px;
+            padding: 16px;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 4px rgba(255, 45, 109, 0.2);
+        }
+
+        .locked-input {
+            background: #f5f7fa;
+            color: #6c6f7d;
+            cursor: not-allowed;
+        }
+
+        .locked-input:focus {
+            border-color: #e9ecef;
+            box-shadow: none;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 18px 35px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #e83f6f, #ff2d6d);
+            color: white;
+            box-shadow: 0 10px 30px rgba(232, 63, 111, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(232, 63, 111, 0.4);
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+            min-height: 550px;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            flex-grow: 1;
+        }
+
+        input[type="file"] {
+            padding: 12px;
+            border: 1px dashed #ddd;
+            background-color: #fff9fb;
+        }
+
+        input[type="file"]::file-selector-button {
+            padding: 10px 18px;
+            background: linear-gradient(135deg, #ff7eb9, #e83f6f);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-right: 12px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background: linear-gradient(135deg, #e83f6f, #ff2d6d);
+        }
+
+        /* Custom file upload UI */
+        .file-upload {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        .file-input {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            white-space: nowrap;
+            border: 0;
+        }
+        .file-btn {
+            padding: 10px 18px;
+            background: linear-gradient(135deg, #ff7eb9, #e83f6f);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .file-btn:hover { background: linear-gradient(135deg, #e83f6f, #ff2d6d); }
+        .file-label {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        /* Better checkbox alignment */
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            user-select: none;
+        }
+
+        input[type="checkbox"] {
+            width: auto;
+            display: inline-block;
+            margin: 0;
+            accent-color: var(--accent-color);
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 1200px) {
+            .content {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .form-container, .map-container {
+                width: 80%;
+                min-height: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-container, .map-container {
+                width: 100%;
+                padding: 30px;
+            }
+            
+            .container {
+                padding: 0 15px;
+                margin: 20px auto;
+            }
+            
+            .form-container h2, .map-container h2 {
+                font-size: 24px;
+            }
+            
+            input, select {
+                padding: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="home.html" class="home-icon" title="Home"><i class="fas fa-home"></i></a>
+    <div class="container">
+        <div class="content">
+            <div class="form-container">
+                <h2>Register as a Blood Donor</h2>
+                <form id="donorForm">
+                    <input type="text" id="name" placeholder="Name" required>
+                    <input type="tel" id="phone" pattern="[0-9]{10}" placeholder="Phone Number (10 digits)" required>
+                    <input type="number" id="age" placeholder="Age" required>
+                    <input type="number" id="weight" placeholder="Weight (kg)" required>
+                    <select id="bloodGroup" required>
+                        <option value="">Select Blood Group</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                    </select>
+                    <label class="checkbox-row">
+                        <input type="checkbox" id="hasDonatedBeforeChk">
+                        <span>I have donated before</span>
+                    </label>
+                    <input type="date" id="lastDonationDate" placeholder="When since you gave blood?" style="display:none;">
+                    <div class="file-upload">
+                        <input type="file" id="verificationFile" class="file-input" required>
+                        <button type="button" id="chooseFileBtn" class="file-btn">Choose file</button>
+                        <span id="fileLabel" class="file-label">Upload your proof</span>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-heart"></i> Add Donor
+                    </button>
+                </form>
+            </div>
+            <div class="map-container" style="display:none;">
+                <h2>You registered in</h2>
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        let currentUser = null;
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            const userData = localStorage.getItem('currentUser');
+            if (!userData) {
+                alert('Please login to register as a donor.');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            currentUser = JSON.parse(userData);
+            document.getElementById('name').value = currentUser.name;
+            const phoneInput = document.getElementById('phone');
+            if (phoneInput) {
+                phoneInput.value = currentUser.phone;
+                phoneInput.readOnly = true;
+                phoneInput.classList.add('locked-input');
+                phoneInput.title = 'Phone number is locked to your registered account';
+            }
+            
+            let map = null;
+    
+            const lastDonationDateInput = document.getElementById('lastDonationDate');
+            const fileInput = document.getElementById('verificationFile');
+            const chooseFileBtn = document.getElementById('chooseFileBtn');
+            const fileLabel = document.getElementById('fileLabel');
+            chooseFileBtn.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files && fileInput.files.length > 0) {
+                    fileLabel.textContent = fileInput.files[0].name;
+                } else {
+                    fileLabel.textContent = 'Upload your proof';
+                }
+            });
+            const hasDonatedBeforeChk = document.getElementById('hasDonatedBeforeChk');
+            function toggleDate(show) {
+                if (show) {
+                    lastDonationDateInput.style.display = 'block';
+                    lastDonationDateInput.required = true;
+                } else {
+                    lastDonationDateInput.style.display = 'none';
+                    lastDonationDateInput.required = false;
+                    lastDonationDateInput.value = '';
+                }
+            }
+            hasDonatedBeforeChk.addEventListener('change', (e) => toggleDate(e.target.checked));
+
+            document.getElementById('donorForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+    
+                var name = document.getElementById('name').value.trim();
+                var phone = document.getElementById('phone').value.trim();
+                var age = document.getElementById('age').value.trim();
+                var weight = document.getElementById('weight').value.trim();
+                var bloodGroup = document.getElementById('bloodGroup').value;
+                var lastDonationDate = document.getElementById('lastDonationDate').value;
+                var hasDonatedBefore = hasDonatedBeforeChk.checked;
+                var verificationFile = document.getElementById('verificationFile').files[0];
+    
+                if (!name) return alert("Please enter your name.");
+                if (!phone || !/^\d{10}$/.test(phone)) return alert("Please enter a valid 10-digit phone number.");
+                if (currentUser && phone !== currentUser.phone) {
+                    alert("Please use your registered phone number.");
+                    return;
+                }
+                if (!age || isNaN(age) || age < 18 || age > 65) return alert("Please enter a valid age between 18 and 65.");
+                if (!weight || isNaN(weight) || weight < 50) return alert("You must weigh at least 50 kg to donate blood.");
+                if (!bloodGroup) return alert("Please select a blood group.");
+                if (hasDonatedBefore) {
+                    if (!lastDonationDate) return alert("Please select your last blood donation date.");
+                    const lastDate = new Date(lastDonationDate);
+                    const today = new Date();
+                    const diffDays = Math.floor((today - lastDate) / (1000 * 60 * 60 * 24));
+                    if (isNaN(lastDate.getTime())) return alert("Invalid last donation date.");
+                    if (diffDays < 90) return alert("You must wait at least 90 days between blood donations.");
+                }
+                if (!verificationFile) return alert("Please upload a donor verification file.");
+    
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const verificationFileData = reader.result;
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        var latitude = position.coords.latitude;
+                        var longitude = position.coords.longitude;
+
+                        const requestBody = { name, phone, age, weight: Number(weight), bloodGroup, hasDonatedBefore, latitude, longitude, verificationFile: verificationFileData };
+                        if (hasDonatedBefore) {
+                            requestBody.lastDonationDate = lastDonationDate;
+                        }
+                        
+                        // Add user ID if signed in
+                        if (currentUser) {
+                            requestBody.userId = currentUser._id;
+                        }
+                        
+                        fetch('/api/blood-donor', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(requestBody)
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            // Hide form and show map full width
+                            const formContainer = document.querySelector('.form-container');
+                            const mapContainer = document.querySelector('.map-container');
+                            const content = document.querySelector('.content');
+                            if (formContainer) formContainer.style.display = 'none';
+                            if (mapContainer) {
+                                mapContainer.style.display = 'block';
+                                mapContainer.style.width = '100%';
+                                mapContainer.style.maxWidth = '100%';
+                                mapContainer.style.margin = '0 auto';
+                                mapContainer.style.minHeight = '650px';
+                            }
+                            if (content) {
+                                content.style.justifyContent = 'center';
+                                content.style.gap = '0px';
+                                content.style.alignItems = 'stretch';
+                            }
+                            // Switch to map-only layout
+                            document.body.classList.add('map-only');
+
+                            // Initialize map only now, if needed
+                            if (!map) {
+                                map = L.map('map').setView([latitude, longitude], 15);
+                                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                    maxZoom: 18,
+                                    attribution: '© OpenStreetMap contributors'
+                                }).addTo(map);
+                            } else {
+                                map.setView([latitude, longitude], 15);
+                            }
+
+                            // Add marker for this donor
+                            L.marker([latitude, longitude]).addTo(map)
+                                .bindPopup(`<b>${name}</b><br>Phone: ${phone}<br>Age: ${age}<br>Weight: ${weight} kg<br>Blood Group: ${bloodGroup}`)
+                                .openPopup();
+
+                            // Ensure Leaflet recalculates size after layout change
+                            setTimeout(() => { map.invalidateSize(); }, 50);
+                            alert(data.message);
+                            document.getElementById('donorForm').reset();
+                        })
+                        .catch(error => alert("Error: " + error.message));
+                    }, function(error) {
+                        alert("Geolocation failed: " + error.message);
+                    });
+                };
+                reader.readAsDataURL(verificationFile);
+            });
+        });
+    </script>
+</body>
+</html>

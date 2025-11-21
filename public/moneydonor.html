@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Money Donation - Social Welfare Connect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #e83f6f;
+            --secondary-color: #ff7eb9;
+            --accent-color: #ff2d6d;
+            --danger-color: #ff6b6b;
+            --success-color: #ff85a2;
+            --light-color: #fff5f7;
+            --dark-color: #5a2a3a;
+            --text-color: #4a2a35;
+            --text-light: #a87b8a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fff5f7, #fff0f5);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .back-button-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(232, 63, 111, 0.3);
+        }
+        .home-icon i { font-size: 18px; }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(232, 63, 111, 0.15);
+            padding: 40px;
+            overflow: hidden;
+        }
+
+        .donation-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to right, #e83f6f, #ff2d6d);
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .donation-form {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .form-group label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .form-group input {
+            padding: 14px 20px;
+            border: 2px solid var(--light-color);
+            border-radius: 50px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 12px rgba(232, 63, 111, 0.2);
+        }
+
+        .form-group input.locked-input {
+            background: #f5f7fa;
+            color: #6c6f7d;
+            cursor: not-allowed;
+        }
+
+        .form-group input.locked-input:focus {
+            border-color: #e9ecef;
+            box-shadow: none;
+        }
+
+        .amount-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .amount-btn {
+            padding: 14px;
+            border: 2px solid var(--primary-color);
+            border-radius: 50px;
+            background: white;
+            color: var(--primary-color);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .amount-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(232, 63, 111, 0.2);
+        }
+
+        .amount-btn.active {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 10px rgba(232, 63, 111, 0.3);
+        }
+
+        .payment-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .payment-option {
+            padding: 15px 25px;
+            border: 2px solid var(--primary-color);
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            font-weight: 600;
+            color: var(--text-color);
+            max-width: 200px;
+            margin: 0 auto;
+        }
+
+        .payment-option i { font-size: 22px; line-height: 1; }
+
+        .payment-option:hover {
+            background: rgba(232, 63, 111, 0.05);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(232, 63, 111, 0.15);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #e83f6f, #ff2d6d);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(232, 63, 111, 0.3);
+            align-self: center;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(232, 63, 111, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 10px rgba(232, 63, 111, 0.2);
+        }
+
+        /* Home icon (top-right) */
+        .home-icon {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(232, 63, 111, 0.3);
+        }
+        .home-icon i { font-size: 18px; }
+
+        /* Popup Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: var(--primary-color);
+            transform: rotate(90deg);
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+            border: 2px solid var(--light-color);
+            border-radius: 10px;
+        }
+
+        .modal-content p {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            margin: 15px 0;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 15px;
+            }
+
+            .container {
+                padding: 25px;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .section-subtitle {
+                font-size: 1rem;
+            }
+
+            .amount-options {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                gap: 10px;
+            }
+
+            .amount-btn {
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+
+            .form-group input {
+                padding: 12px 15px;
+            }
+
+            .btn {
+                padding: 14px 30px;
+                font-size: 1rem;
+            }
+
+            .modal-content {
+                padding: 20px;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="home.html" class="home-icon" title="Home"><i class="fas fa-home"></i></a>
+
+    <div class="container">
+        <div class="donation-header">
+            <h2 class="section-title">Monetary Donation</h2>
+            <p class="section-subtitle">Your generous contribution supports verified NGOs in their mission to create lasting impact in communities across India.</p>
+        </div>
+
+        <form class="donation-form" id="donationForm">
+            <div class="form-group">
+                <label for="donorName">Donor Name</label>
+                <input type="text" id="donorName" name="donorName" placeholder="Enter your name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Select Donation Amount</label>
+                <div class="amount-options">
+                    <button type="button" class="amount-btn" data-amount="100">₹100</button>
+                    <button type="button" class="amount-btn" data-amount="250">₹250</button>
+                    <button type="button" class="amount-btn" data-amount="500">₹500</button>
+                    <button type="button" class="amount-btn" data-amount="1000">₹1000</button>
+                </div>
+                <input type="number" id="customAmount" name="customAmount" placeholder="Custom amount (₹)" min="1">
+            </div>
+
+            <div class="form-group">
+                <label>Payment Method</label>
+                <div class="payment-methods">
+                    <div class="payment-option" data-method="gpay">
+                        <i class="fab fa-google"></i>
+                        <span>GPay</span>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn" id="donateBtn">Proceed to Donate</button>
+        </form>
+    </div>
+
+    <!-- GPay QR Code Popup -->
+    <div class="modal" id="gpayModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">×</span>
+            <h3>Scan to Pay with GPay</h3>
+            <p id="modalAmount">Amount: ₹0</p>
+            <img id="gpayQR" src="gpay_qr.png" alt="GPay QR Code" onerror="this.onerror=null; this.src='https://via.placeholder.com/200?text=QR+Code+Not+Loaded'; console.log('QR Code failed to load');">
+            <p>Please scan the QR code using your GPay app to complete the donation. Enter the amount manually in the app.</p>
+        </div>
+    </div>
+
+    <script>
+        const amountButtons = document.querySelectorAll('.amount-btn');
+        const customAmount = document.getElementById('customAmount');
+        const paymentOption = document.querySelector('.payment-option');
+        const donationForm = document.getElementById('donationForm');
+        const gpayModal = document.getElementById('gpayModal');
+        const gpayQR = document.getElementById('gpayQR');
+        const modalAmount = document.getElementById('modalAmount');
+        let selectedAmount = 0;
+        let currentUser = null;
+    
+        const qrCodeUrl = "/gpay_qr.png"; // Serve from public folder
+        
+        // Check if user is signed in and auto-fill form
+        document.addEventListener('DOMContentLoaded', function() {
+            const userData = localStorage.getItem('currentUser');
+            if (!userData) {
+                alert('Please login before continuing with donations.');
+                window.location.href = 'login.html';
+                return;
+            }
+            currentUser = JSON.parse(userData);
+            document.getElementById('donorName').value = currentUser.name;
+        });
+    
+        amountButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                amountButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                selectedAmount = parseInt(this.getAttribute('data-amount'));
+                customAmount.value = '';
+            });
+        });
+    
+        customAmount.addEventListener('input', function() {
+            amountButtons.forEach(btn => btn.classList.remove('active'));
+            selectedAmount = this.value ? parseInt(this.value) : 0;
+        });
+    
+        paymentOption.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (selectedAmount <= 0) return alert('Please select or enter a donation amount first.');
+            showGPayQR(selectedAmount);
+        });
+    
+        donationForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const donorName = document.getElementById('donorName').value.trim();
+    
+            if (!donorName) return alert('Please enter your name.');
+            if (selectedAmount <= 0) return alert('Please select or enter a donation amount.');
+    
+            const requestBody = { 
+                donorName, 
+                amount: selectedAmount, 
+                paymentMethod: 'GPay'
+            };
+            
+            // Add user ID if signed in
+            if (currentUser) {
+                requestBody.userId = currentUser._id;
+            }
+    
+            // Optional: attach a payment proof image later if collected; currently none
+            fetch('/api/money-donor', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestBody)
+            })
+            .then(response => response.json())
+            .then(data => {
+                showGPayQR(selectedAmount);
+                alert(data.message);
+            })
+            .catch(error => alert("Error: " + error.message));
+        });
+    
+        function showGPayQR(amount) {
+            gpayQR.src = qrCodeUrl;
+            modalAmount.textContent = `Amount: ₹${amount}`;
+            gpayModal.style.display = 'flex';
+        }
+    
+        function closeModal() {
+            gpayModal.style.display = 'none';
+        }
+    
+        window.onclick = function(event) {
+            if (event.target === gpayModal) closeModal();
+        };
+    </script>
+</body>
+</html>

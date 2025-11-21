@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Receiver - Social Welfare Connect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        :root {
+            --primary-color: #e83f6f;
+            --secondary-color: #ff7eb9;
+            --accent-color: #ff2d6d;
+            --danger-color: #ff6b6b;
+            --success-color: #ff85a2;
+            --light-color: #fff5f7;
+            --dark-color: #5a2a3a;
+            --text-color: #4a2a35;
+            --text-light: #a87b8a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #fff5f7;
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-button-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(232, 63, 111, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 6px 20px rgba(232, 63, 111, 0.4);
+        }
+
+        .home-icon {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(232, 63, 111, 0.3);
+        }
+        .home-icon i { font-size: 18px; }
+
+        .container {
+            max-width: 1400px;
+            width: 90%;
+            margin: 40px auto;
+            padding: 0 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .start-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 18px 35px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            background: linear-gradient(135deg, #e83f6f, #ff2d6d);
+            color: white;
+            box-shadow: 0 10px 30px rgba(232, 63, 111, 0.3);
+            margin-bottom: 30px;
+        }
+
+        .start-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(232, 63, 111, 0.4);
+        }
+
+        .content {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .form-container {
+            width: 600px;
+            min-height: 650px;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(232, 63, 111, 0.15);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(232, 63, 111, 0.2);
+        }
+
+        .form-container h2 {
+            margin-bottom: 30px;
+            font-weight: 700;
+            color: var(--dark-color);
+            position: relative;
+            display: inline-block;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        .form-container h2::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+
+        input, select {
+            display: block;
+            width: 100%;
+            margin-bottom: 25px;
+            padding: 16px;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 4px rgba(255, 45, 109, 0.2);
+        }
+
+        .locked-input {
+            background: #f5f7fa;
+            color: #6c6f7d;
+            cursor: not-allowed;
+        }
+
+        .locked-input:focus {
+            border-color: #e9ecef;
+            box-shadow: none;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 18px 35px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .status-note {
+            margin-top: 10px;
+            text-align: center;
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .link-button {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 0;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #e83f6f, #ff2d6d);
+            color: white;
+            box-shadow: 0 10px 30px rgba(232, 63, 111, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(232, 63, 111, 0.4);
+        }
+
+        #map {
+            height: 400px;
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        input[type="file"] {
+            padding: 12px;
+            border: 1px dashed #ddd;
+            background-color: #fff9fb;
+        }
+
+        input[type="file"]::file-selector-button {
+            padding: 10px 18px;
+            background: linear-gradient(135deg, #ff7eb9, #e83f6f);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-right: 12px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background: linear-gradient(135deg, #e83f6f, #ff2d6d);
+        }
+
+        /* Custom file upload UI */
+        .file-upload {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        .file-input { display: none; }
+        .file-btn {
+            padding: 10px 18px;
+            background: linear-gradient(135deg, #ff7eb9, #e83f6f);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .file-btn:hover { background: linear-gradient(135deg, #e83f6f, #ff2d6d); }
+        .file-label { color: var(--text-light); font-size: 14px; }
+
+        /* Post-Registration Layout */
+        .post-registration {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin-top: 30px;
+        }
+
+        .verification-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(232, 63, 111, 0.15);
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .verification-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(232, 63, 111, 0.2);
+        }
+
+        .verification-card h2 {
+            margin-bottom: 15px;
+            font-size: 26px;
+            color: var(--dark-color);
+        }
+
+        .status-message {
+            font-size: 16px;
+            color: var(--text-color);
+            margin-bottom: 20px;
+        }
+
+        .status-controls {
+            display: flex;
+            gap: 12px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .status-controls input {
+            flex: 1;
+            min-width: 220px;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid #eee;
+        }
+
+        .status-controls .btn {
+            width: auto;
+            padding: 14px 28px;
+            margin-top: 0;
+        }
+
+        .map-container {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(232, 63, 111, 0.15);
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .map-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(232, 63, 111, 0.2);
+        }
+
+        .map-container h2 {
+            margin-bottom: 20px;
+            font-weight: 700;
+            color: var(--dark-color);
+            position: relative;
+            display: inline-block;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        .map-container h2::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+
+        .donor-list {
+            margin-top: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(232, 63, 111, 0.1);
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .donor-list h3 {
+            font-size: 22px;
+            color: var(--dark-color);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .donor-list table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .donor-list th, .donor-list td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 18px;
+            box-shadow: 0 2px 8px rgba(37, 211, 102, 0.3);
+        }
+
+        .whatsapp-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+        }
+
+        .whatsapp-btn:active {
+            transform: scale(0.95);
+        }
+
+        .donor-list th {
+            background-color: #fff9fb;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                width: 100%;
+                padding: 30px;
+            }
+            
+            .container {
+                padding: 0 15px;
+                margin: 20px auto;
+            }
+            
+            .form-container h2 {
+                font-size: 24px;
+            }
+            
+            input, select {
+                padding: 14px;
+            }
+            
+            .map-container, .donor-list {
+                width: 100%;
+                padding: 25px;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="home.html" class="home-icon" title="Home"><i class="fas fa-home"></i></a>
+
+    <div class="container">
+        <div class="content" id="registrationContent">
+            <div class="form-container">
+                <h2>Register as a Blood Receiver</h2>
+                <form id="receiverForm">
+                    <input type="text" id="name" placeholder="Full Name" required>
+                    <input type="tel" id="phone" pattern="[0-9]{10}" placeholder="Phone Number (10 digits)" required>
+                    <input type="text" id="location" placeholder="Location (e.g., City, Hospital)" required>
+                    <select id="bloodNeed" required>
+                        <option value="">Blood You Need</option>
+                        <option value="A+ Surgery">A+</option>
+                        <option value="A- Emergency">A-</option>
+                        <option value="B+ Chronic Illness">B+</option>
+                        <option value="AB- Other">AB-</option>
+                        <option value="O+ Surgery">O+</option>
+                        <option value="O- Emergency">O-</option>
+                    </select>
+                    <div class="file-upload">
+                        <input type="file" id="proofFile" class="file-input" required>
+                        <button type="button" id="chooseFileBtn" class="file-btn">Choose file</button>
+                        <span id="fileLabel" class="file-label">Upload your proof</span>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-user-plus"></i> Register as Receiver
+                    </button>
+                <p class="status-note">
+                    Already registered?
+                    <button type="button" class="link-button" id="openStatusPanel">Check verification status</button>
+                </p>
+                </form>
+            </div>
+        </div>
+        <div class="post-registration" id="postRegistration">
+            <div class="verification-card" id="verificationCard" style="display: none;">
+                <h2>Verification Status</h2>
+                <p class="status-message" id="verificationStatusMessage">
+                    Once your submission is approved by an admin, you can retrieve nearby donors using your registered phone number.
+                </p>
+                <div class="status-controls">
+                    <input type="tel" id="statusPhone" placeholder="Enter your registered phone (10 digits)" pattern="[0-9]{10}">
+                    <button type="button" class="btn btn-primary" id="checkDonorsBtn">
+                        <i class="fas fa-search"></i> Check Donor Availability
+                    </button>
+                </div>
+            </div>
+            <div class="map-container" id="mapContainer" style="display: none;">
+                <h2>Nearby Blood Donors</h2>
+                <div id="map"></div>
+            </div>
+            <div class="donor-list" id="donorList" style="display: none;">
+                <h3>Available Donors</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Blood Group</th>
+                            <th>Phone</th>
+                            <th>Contact</th>
+                        </tr>
+                    </thead>
+                    <tbody id="donorTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+        let currentUser = null;
+        let map;
+        let donorMarkers = [];
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            const userData = localStorage.getItem('currentUser');
+            if (!userData) {
+                alert('Please login to request help.');
+                window.location.href = 'login.html';
+                return;
+            }
+            currentUser = JSON.parse(userData);
+            document.getElementById('name').value = currentUser.name;
+            const phoneInput = document.getElementById('phone');
+            if (phoneInput) {
+                phoneInput.value = currentUser.phone;
+                phoneInput.readOnly = true;
+                phoneInput.classList.add('locked-input');
+                phoneInput.title = 'Phone number is locked to your registered account';
+            }
+
+            const registrationContent = document.getElementById('registrationContent');
+            const postRegistration = document.getElementById('postRegistration');
+            const verificationCard = document.getElementById('verificationCard');
+            const verificationMessage = document.getElementById('verificationStatusMessage');
+            const statusPhoneInput = document.getElementById('statusPhone');
+            const checkDonorsBtn = document.getElementById('checkDonorsBtn');
+            const openStatusPanelBtn = document.getElementById('openStatusPanel');
+            const mapContainer = document.getElementById('mapContainer');
+            const donorListContainer = document.getElementById('donorList');
+            const donorTableBody = document.getElementById('donorTableBody');
+            const fileInput = document.getElementById('proofFile');
+            const chooseFileBtn = document.getElementById('chooseFileBtn');
+            const fileLabel = document.getElementById('fileLabel');
+            const receiverForm = document.getElementById('receiverForm');
+
+            statusPhoneInput.value = currentUser ? currentUser.phone : '';
+
+            chooseFileBtn.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files && fileInput.files.length > 0) {
+                    fileLabel.textContent = fileInput.files[0].name;
+                } else {
+                    fileLabel.textContent = 'Upload your proof';
+                }
+            });
+
+            function initMap(latitude, longitude) {
+                if (!map) {
+                    map = L.map('map').setView([latitude, longitude], 13);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 18,
+                        attribution: '© OpenStreetMap contributors'
+                    }).addTo(map);
+                } else {
+                    map.setView([latitude, longitude], 13);
+                }
+                return map;
+            }
+
+            function clearDonorMarkers() {
+                if (map && donorMarkers.length > 0) {
+                    donorMarkers.forEach(marker => map.removeLayer(marker));
+                    donorMarkers = [];
+                }
+            }
+
+            function hideDonorResults() {
+                mapContainer.style.display = 'none';
+                donorListContainer.style.display = 'none';
+                donorTableBody.innerHTML = '';
+                clearDonorMarkers();
+            }
+
+            function showVerificationPanel(message, phone) {
+                verificationMessage.textContent = message;
+                if (phone) {
+                    statusPhoneInput.value = phone;
+                }
+                registrationContent.style.display = 'none';
+                postRegistration.style.display = 'flex';
+                verificationCard.style.display = 'flex';
+                hideDonorResults();
+            }
+
+            function hideVerificationPanel() {
+                verificationCard.style.display = 'none';
+            }
+
+            function renderDonorResults(receiver, donors) {
+                const latitude = receiver.latitude ?? 13.0827;
+                const longitude = receiver.longitude ?? 80.2707;
+                const mapInstance = initMap(latitude, longitude);
+                clearDonorMarkers();
+
+                donors.forEach(donor => {
+                    if (donor.latitude != null && donor.longitude != null) {
+                        const marker = L.marker([donor.latitude, donor.longitude]).addTo(mapInstance)
+                            .bindPopup(`<b>${donor.name}</b><br>Phone: ${donor.phone}<br>Blood Group: ${donor.bloodGroup}`);
+                        donorMarkers.push(marker);
+                    }
+                });
+
+                mapContainer.style.display = 'block';
+                donorListContainer.style.display = 'block';
+                donorTableBody.innerHTML = '';
+
+                if (!donors.length) {
+                    donorTableBody.innerHTML = '<tr><td colspan="4">No matching donors found.</td></tr>';
+                    return;
+                }
+
+                donors.forEach(donor => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${donor.name}</td>
+                        <td>${donor.bloodGroup}</td>
+                        <td>${donor.phone}</td>
+                    `;
+                    const contactCell = document.createElement('td');
+                    const contactBtn = document.createElement('button');
+                    contactBtn.className = 'whatsapp-btn';
+                    contactBtn.title = 'Contact via WhatsApp';
+                    contactBtn.innerHTML = '<i class="fab fa-whatsapp"></i>';
+                    contactBtn.addEventListener('click', () => {
+                        openWhatsApp(donor.phone, receiver.name, receiver.bloodNeed, receiver.location || 'your location');
+                    });
+                    contactCell.appendChild(contactBtn);
+                    row.appendChild(contactCell);
+                    donorTableBody.appendChild(row);
+                });
+            }
+
+            openStatusPanelBtn.addEventListener('click', () => {
+                showVerificationPanel('Enter your registered phone number to check donor availability.', statusPhoneInput.value || (currentUser ? currentUser.phone : ''));
+                statusPhoneInput.focus();
+            });
+
+            checkDonorsBtn.addEventListener('click', () => {
+                const phoneToCheck = statusPhoneInput.value.trim();
+                if (!/^\d{10}$/.test(phoneToCheck)) {
+                    alert("Please enter a valid 10-digit phone number.");
+                    return;
+                }
+                showVerificationPanel('Checking verification status...', phoneToCheck);
+
+                fetch(`/api/blood-receiver/matching-donors?phone=${phoneToCheck}`)
+                    .then(async response => {
+                        const data = await response.json();
+                        if (!response.ok) {
+                            hideDonorResults();
+                            verificationMessage.textContent = data.message || data.error || 'Unable to fetch donor details.';
+                            return;
+                        }
+                        verificationMessage.textContent = data.message;
+                        hideVerificationPanel();
+                        renderDonorResults(data.receiver, data.donors || []);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        hideDonorResults();
+                        verificationMessage.textContent = 'Unexpected error occurred. Please try again.';
+                    });
+            });
+
+            receiverForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const name = document.getElementById('name').value.trim();
+                const phone = document.getElementById('phone').value.trim();
+                const location = document.getElementById('location').value.trim();
+                const bloodNeed = document.getElementById('bloodNeed').value.split(' ')[0];
+                const proofFile = fileInput.files[0];
+
+                if (!name) return alert("Please enter your full name.");
+                if (!phone || !/^\d{10}$/.test(phone)) return alert("Please enter a valid 10-digit phone number.");
+                if (currentUser && phone !== currentUser.phone) {
+                    alert("Please use your registered phone number.");
+                    return;
+                }
+                if (!location) return alert("Please enter your location.");
+                if (!bloodNeed) return alert("Please select the reason for blood need.");
+                if (!proofFile) return alert("Please upload proof of need (e.g., medical certificate).");
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const verificationFileData = e.target.result;
+
+                    const submitWithCoordinates = (latitude, longitude) => {
+                        fetch('/api/blood-receiver', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ name, phone, location, bloodNeed, latitude, longitude, verificationFile: verificationFileData })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            showVerificationPanel(data.message + ' Use your registered phone number below to view donors once approved.', phone);
+                            alert(data.message);
+                        })
+                        .catch(error => alert("Error: " + error.message));
+                    };
+
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        submitWithCoordinates(position.coords.latitude, position.coords.longitude);
+                    }, function(error) {
+                        alert("Geolocation failed: " + error.message + ". Using default location.");
+                        submitWithCoordinates(13.0827, 80.2707);
+                    });
+                };
+
+                reader.onerror = function() {
+                    alert("Failed to read the uploaded proof. Please try again.");
+                };
+
+                reader.readAsDataURL(proofFile);
+            });
+        });
+
+        function openWhatsApp(donorPhone, receiverName, bloodNeed, location) {
+            let formattedPhone = donorPhone.replace(/\D/g, '');
+            if (formattedPhone.length === 10) {
+                formattedPhone = '91' + formattedPhone;
+            }
+            const message = `*BLOOD DONATION REQUEST*
+
+Hello! I'm *${receiverName}* and I urgently need *${bloodNeed}* blood at *${location}*.
+
+I found your contact through Social Welfare Connect platform.
+
+*IMPORTANT*: This is an urgent medical requirement.
+
+Could you please help me? Your generosity can save a life!
+
+Thank you for your kindness and support!
+
+---
+Sent via Social Welfare Connect`;
+            const whatsappUrl = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+    </script>
+</body>
+</html>

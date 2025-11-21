@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Social Welfare Connect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #e83f6f;
+            --secondary-color: #ff7eb9;
+            --accent-color: #ff2d6d;
+            --danger-color: #ff6b6b;
+            --success-color: #ff85a2;
+            --light-color: #fff5f7;
+            --dark-color: #5a2a3a;
+            --text-color: #4a2a35;
+            --text-light: #a87b8a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fff9fb, #fff0f5);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(232, 63, 111, 0.2);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+        }
+
+        .logo i {
+            margin-right: 15px;
+            font-size: 32px;
+        }
+
+        h1 {
+            color: var(--dark-color);
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark-color);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(232, 63, 111, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(232, 63, 111, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .otp-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            text-align: right;
+        }
+
+        .otp-group label {
+            width: 100%;
+            text-align: right;
+        }
+
+        .otp-actions,
+        .otp-input-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .otp-actions {
+            justify-content: flex-end;
+            margin-bottom: 12px;
+        }
+
+        .otp-actions,
+        .recaptcha-container,
+        .otp-input-row {
+            justify-content: flex-end;
+        }
+
+        .otp-input-row input {
+            flex: 0 0 220px;
+            max-width: 220px;
+        }
+
+        .otp-input-row .btn,
+        .otp-actions .btn {
+            width: auto;
+            padding: 12px 20px;
+            font-size: 14px;
+        }
+
+        .helper-text {
+            display: block;
+            margin-top: 8px;
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .recaptcha-container {
+            margin-top: 10px;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+            color: var(--text-light);
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e9ecef;
+        }
+
+        .divider span {
+            padding: 0 15px;
+            font-size: 14px;
+        }
+
+        .signup-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .signup-link:hover {
+            color: var(--accent-color);
+            text-decoration: underline;
+        }
+
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .back-home:hover {
+            color: var(--primary-color);
+            transform: translateX(-5px);
+        }
+
+        .error-message {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .logo {
+                font-size: 24px;
+            }
+            
+            .logo i {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-hands-helping"></i>
+            <span>Social Welfare Connect</span>
+        </div>
+        
+        <h1>Welcome Back</h1>
+        
+        <div id="errorMessage" class="error-message"></div>
+        <div id="successMessage" class="success-message"></div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" pattern="[0-9]{10}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+
+            <div class="form-group otp-group">
+                <label>Phone OTP Verification</label>
+                <div class="otp-actions">
+                    <button type="button" class="btn" id="loginSendOtpBtn">
+                        <i class="fas fa-sms"></i> Send OTP
+                    </button>
+                </div>
+                <div class="otp-input-row">
+                    <input type="text" id="loginOtp" placeholder="Enter 6-digit OTP" inputmode="numeric" maxlength="6">
+                    <button type="button" class="btn" id="loginVerifyOtpBtn">
+                        <i class="fas fa-check-circle"></i> Verify OTP
+                    </button>
+                </div>
+                <small class="helper-text">OTP verification is required before signing in.</small>
+                <div id="recaptcha-container-login" class="recaptcha-container"></div>
+            </div>
+            
+            <button type="submit" class="btn">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+            </button>
+        </form>
+        
+        <div class="divider">
+            <span>Don't have an account?</span>
+        </div>
+        
+        <a href="signup.html" class="signup-link">Create Account Here</a>
+        
+        <a href="home.html" class="back-home">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script>
+        const firebaseApp = !firebase.apps.length ? firebase.initializeApp(window.firebaseConfig) : firebase.app();
+        const firebaseAuth = firebase.auth();
+        let loginConfirmationResult = null;
+        let loginOtpVerified = false;
+        let verifiedPhoneForLogin = null;
+        let loginRecaptchaVerifier = null;
+
+        const loginForm = document.getElementById('loginForm');
+        const loginSubmitBtn = loginForm.querySelector('button[type="submit"]');
+        const loginSendOtpBtn = document.getElementById('loginSendOtpBtn');
+        const loginVerifyOtpBtn = document.getElementById('loginVerifyOtpBtn');
+        const loginOtpInput = document.getElementById('loginOtp');
+        const phoneInput = document.getElementById('phone');
+
+        loginSubmitBtn.disabled = true;
+
+        phoneInput.addEventListener('input', () => {
+            loginOtpVerified = false;
+            verifiedPhoneForLogin = null;
+            loginConfirmationResult = null;
+            loginOtpInput.value = '';
+            loginSubmitBtn.disabled = true;
+        });
+
+        function createLoginRecaptchaVerifier() {
+            if (loginRecaptchaVerifier) {
+                loginRecaptchaVerifier.clear();
+            }
+            loginRecaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container-login', {
+                size: 'invisible'
+            });
+            loginRecaptchaVerifier.render();
+            return loginRecaptchaVerifier;
+        }
+
+        loginSendOtpBtn.addEventListener('click', async () => {
+            const phone = phoneInput.value.trim();
+
+            if (!/^\d{10}$/.test(phone)) {
+                showMessage('Please enter a valid 10-digit phone number before requesting OTP.', 'error');
+                return;
+            }
+
+            loginSendOtpBtn.disabled = true;
+
+            try {
+                const appVerifier = createLoginRecaptchaVerifier();
+                loginConfirmationResult = await firebaseAuth.signInWithPhoneNumber('+91' + phone, appVerifier);
+                showMessage('OTP sent successfully. Please check your phone.', 'success');
+                loginOtpInput.focus();
+            } catch (error) {
+                console.error('OTP send error:', error);
+                showMessage(error.message || 'Failed to send OTP. Please try again.', 'error');
+            } finally {
+                loginSendOtpBtn.disabled = false;
+            }
+        });
+
+        loginVerifyOtpBtn.addEventListener('click', async () => {
+            const otp = loginOtpInput.value.trim();
+
+            if (!loginConfirmationResult) {
+                showMessage('Please request an OTP before attempting verification.', 'error');
+                return;
+            }
+
+            if (!/^\d{6}$/.test(otp)) {
+                showMessage('Enter a valid 6-digit OTP.', 'error');
+                return;
+            }
+
+            loginVerifyOtpBtn.disabled = true;
+
+            try {
+                await loginConfirmationResult.confirm(otp);
+                loginOtpVerified = true;
+                verifiedPhoneForLogin = phoneInput.value.trim();
+                loginSubmitBtn.disabled = false;
+                loginOtpInput.value = '';
+                showMessage('OTP verified successfully. You can now sign in.', 'success');
+                await firebaseAuth.signOut();
+            } catch (error) {
+                console.error('OTP verify error:', error);
+                showMessage(error.message || 'Failed to verify OTP. Please try again.', 'error');
+            } finally {
+                loginVerifyOtpBtn.disabled = false;
+            }
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const phone = document.getElementById('phone').value.trim();
+            const password = document.getElementById('password').value;
+            
+            // Basic validation
+            if (!phone || !password) {
+                showMessage('Please fill in all fields.', 'error');
+                return;
+            }
+            
+            if (phone.length !== 10 || !/^\d{10}$/.test(phone)) {
+                showMessage('Please enter a valid 10-digit phone number.', 'error');
+                return;
+            }
+            
+            if (!loginOtpVerified || verifiedPhoneForLogin !== phone) {
+                showMessage('Please complete OTP verification for this phone number before signing in.', 'error');
+                return;
+            }
+
+            // Show loading message
+            showMessage('Signing you in...', 'success');
+            
+            try {
+                // Send login request to API
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        phone: phone,
+                        password: password
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Login failed');
+                }
+                
+                // Store user data in localStorage for session management
+                localStorage.setItem('currentUser', JSON.stringify(data.user));
+                
+                showMessage('Welcome back, ' + data.user.name + '! Redirecting...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'home.html';
+                }, 1500);
+                
+            } catch (error) {
+                showMessage(error.message, 'error');
+            }
+        });
+        
+        function showMessage(message, type) {
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+            
+            if (type === 'error') {
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+                successDiv.style.display = 'none';
+            } else {
+                successDiv.textContent = message;
+                successDiv.style.display = 'block';
+                errorDiv.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

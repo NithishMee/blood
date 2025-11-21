@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Details - Social Welfare Connect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #e83f6f;
+            --accent-color: #ff2d6d;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --text-color: #4a2a35;
+            --text-light: #a87b8a;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: linear-gradient(135deg, #fff9fb, #fff0f5); color: var(--text-color); min-height: 100vh; }
+        .header { background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: white; padding: 20px 0; box-shadow: 0 4px 20px rgba(232, 63, 111, 0.3); }
+        .header-content { max-width: 1000px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+        .back-btn { color: white; text-decoration: none; display: flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 25px; background: rgba(255, 255, 255, 0.2); transition: all 0.3s ease; }
+        .back-btn:hover { background: rgba(255, 255, 255, 0.3); transform: translateX(-5px); }
+        .container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+        .card { background: #fff; border-radius: 16px; box-shadow: 0 10px 30px rgba(232, 63, 111, 0.12); padding: 24px; }
+        .title { font-size: 1.6rem; font-weight: 700; margin-bottom: 16px; color: #5a2a3a; text-transform: capitalize; }
+        .grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 24px; }
+        .field { margin-bottom: 10px; }
+        .label { color: var(--text-light); font-weight: 600; font-size: 0.9rem; }
+        .value { color: var(--text-color); font-weight: 600; }
+        .image { width: 100%; border-radius: 12px; border: 1px solid #eee; box-shadow: 0 4px 14px rgba(0,0,0,0.06); }
+        .notes { margin-top: 16px; }
+        .notes textarea { width: 100%; min-height: 120px; border: 1px solid #ddd; border-radius: 10px; padding: 12px; }
+        .actions { display: flex; gap: 12px; margin-top: 16px; }
+        .btn { padding: 12px 18px; border: none; border-radius: 20px; font-weight: 700; cursor: pointer; color: #fff; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-approve { background: var(--success-color); }
+        .btn-approve:hover { filter: brightness(0.95); }
+        .btn-reject { background: var(--danger-color); }
+        .btn-reject:hover { filter: brightness(0.95); }
+        .meta { color: var(--text-light); font-size: 0.9rem; margin-top: 8px; }
+        .error { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 12px; border-radius: 8px; margin-bottom: 16px; }
+        @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo" style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px;">
+                <i class="fas fa-shield-check"></i> Verification Details
+            </div>
+            <a href="admin.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="error" class="error" style="display:none"></div>
+        <div class="card">
+            <div class="title" id="recordTitle">Loading...</div>
+            <div class="grid">
+                <div>
+                    <div class="field"><div class="label">Name</div><div class="value" id="fieldName">—</div></div>
+                    <div class="field"><div class="label">Phone</div><div class="value" id="fieldPhone">—</div></div>
+                    <div class="field" id="fieldBloodGroupWrap" style="display:none"><div class="label">Blood Group</div><div class="value" id="fieldBloodGroup"></div></div>
+                    <div class="field" id="fieldOrganTypeWrap" style="display:none"><div class="label">Organ Type</div><div class="value" id="fieldOrganType"></div></div>
+                    <div class="field" id="fieldConditionWrap" style="display:none"><div class="label">Condition</div><div class="value" id="fieldCondition"></div></div>
+                    <div class="field" id="fieldAmountWrap" style="display:none"><div class="label">Amount</div><div class="value" id="fieldAmount"></div></div>
+                    <div class="field" id="fieldMethodWrap" style="display:none"><div class="label">Payment Method</div><div class="value" id="fieldMethod"></div></div>
+                    <div class="meta" id="fieldSubmitted">Submitted: —</div>
+                    <div class="meta" id="fieldStatus">Status: —</div>
+                    <div class="notes">
+                        <div class="label" style="margin-bottom:6px;">Admin Notes</div>
+                        <textarea id="adminNotes" placeholder="Add notes for this verification..."></textarea>
+                    </div>
+                    <div class="actions">
+                        <button id="approveBtn" class="btn btn-approve"><i class="fas fa-check"></i> Approve</button>
+                        <button id="rejectBtn" class="btn btn-reject"><i class="fas fa-times"></i> Reject</button>
+                    </div>
+                </div>
+                <div>
+                    <div class="label" style="margin-bottom:8px;">Verification Document</div>
+                    <img id="verifImage" class="image" alt="Verification document" src="" onerror="this.style.display='none'">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function getParam(name) {
+            const url = new URL(window.location.href);
+            return url.searchParams.get(name);
+        }
+        const type = getParam('type');
+        const id = getParam('id');
+        let record = null;
+
+        async function loadRecord() {
+            try {
+                if (!type || !id) throw new Error('Missing type or id');
+                const res = await fetch(`/api/admin/verification/${type}/${id}`);
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Failed to load record');
+                record = data;
+                renderRecord();
+            } catch (e) {
+                const error = document.getElementById('error');
+                error.textContent = e.message;
+                error.style.display = 'block';
+            }
+        }
+
+        function renderRecord() {
+            document.getElementById('recordTitle').textContent = `Verify ${type.replace('-', ' ')}`;
+            document.getElementById('fieldName').textContent = record.name || record.donorName || 'N/A';
+            document.getElementById('fieldPhone').textContent = record.phone || 'N/A';
+            document.getElementById('fieldSubmitted').textContent = `Submitted: ${record.submittedAt ? new Date(record.submittedAt).toLocaleString() : '—'}`;
+            document.getElementById('fieldStatus').textContent = `Status: ${record.verificationStatus || 'pending'}`;
+            document.getElementById('adminNotes').value = record.adminNotes || '';
+
+            if (record.bloodGroup) {
+                document.getElementById('fieldBloodGroup').textContent = record.bloodGroup;
+                document.getElementById('fieldBloodGroupWrap').style.display = 'block';
+            }
+            if (record.organType) {
+                document.getElementById('fieldOrganType').textContent = record.organType;
+                document.getElementById('fieldOrganTypeWrap').style.display = 'block';
+            }
+            if (record.conditionStatus) {
+                document.getElementById('fieldCondition').textContent = record.conditionStatus;
+                document.getElementById('fieldConditionWrap').style.display = 'block';
+            }
+            if (record.amount) {
+                document.getElementById('fieldAmount').textContent = record.amount;
+                document.getElementById('fieldAmountWrap').style.display = 'block';
+            }
+            if (record.paymentMethod) {
+                document.getElementById('fieldMethod').textContent = record.paymentMethod;
+                document.getElementById('fieldMethodWrap').style.display = 'block';
+            }
+
+            const imgSrc = record.verificationFile || record.proofFile || '';
+            const img = document.getElementById('verifImage');
+            if (imgSrc) { img.src = imgSrc; img.style.display = 'block'; } else { img.style.display = 'none'; }
+        }
+
+        async function verify(status) {
+            try {
+                const res = await fetch('/api/admin/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ type, id, status, notes: document.getElementById('adminNotes').value })
+                });
+                const result = await res.json();
+                if (!res.ok) throw new Error(result.error || 'Failed to update');
+                alert(`Verification ${status} successfully!`);
+                window.location.href = 'admin.html';
+            } catch (e) {
+                alert(e.message);
+            }
+        }
+
+        document.getElementById('approveBtn').addEventListener('click', () => verify('approved'));
+        document.getElementById('rejectBtn').addEventListener('click', () => verify('rejected'));
+        document.addEventListener('DOMContentLoaded', loadRecord);
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Welfare Connect - Volunteer & Donor Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #e83f6f;  /* Vibrant pink */
+            --secondary-color: #ff7eb9;  /* Soft pink */
+            --accent-color: #ff2d6d;  /* Bright pink */
+            --danger-color: #ff6b6b;  /* Coral pink */
+            --success-color: #ff85a2;  /* Muted pink */
+            --light-color: #fff5f7;  /* Light pink */
+            --dark-color: #5a2a3a;  /* Dark pink */
+            --text-color: #4a2a35;  /* Deep pink-gray */
+            --text-light: #a87b8a;  /* Muted pink */
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #fff5f7;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #e83f6f, #ff7eb9);
+            color: white;
+            padding: 15px 0;
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+            border-radius: 50px;
+            width: 90%;
+            max-width: 1100px;
+            margin: 0 auto;
+            box-shadow: 0 4px 20px rgba(232, 63, 111, 0.3);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            margin-right: 40px;
+            color: white;
+            text-decoration: none;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+            position: relative;
+        }
+
+        .auth-btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            border: none;
+            font-size: 14px;
+            background: white;
+            color: #e83f6f;
+            border: 2px solid white;
+            width: 100px;
+            display: inline-block;
+            text-align: center;
+            box-sizing: border-box;
+            flex-shrink: 0;
+        }
+
+        .auth-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+        }
+
+        .profile-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .profile-info:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .profile-photo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .profile-name {
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            margin-top: 10px;
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background: #f8f9fa;
+            color: var(--primary-color);
+        }
+
+        .dropdown-item i {
+            width: 16px;
+            color: var(--text-light);
+        }
+
+        .dropdown-divider {
+            border-top: 1px solid #eee;
+            margin: 5px 0;
+        }
+
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            font-size: 24px;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 0 20px;
+            }
+            
+            .auth-buttons {
+                display: none;
+            }
+            
+            .profile-container {
+                display: none;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            nav {
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: linear-gradient(135deg, #e83f6f, #ff7eb9);
+                border-radius: 0 0 20px 20px;
+                padding: 20px;
+                box-shadow: 0 10px 30px rgba(232, 63, 111, 0.3);
+                display: none;
+            }
+            
+            nav.active {
+                display: block;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul li {
+                margin: 0;
+            }
+            
+            .auth-buttons.mobile {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 15px;
+            }
+            
+            .profile-container.mobile {
+                display: block;
+                margin-top: 15px;
+            }
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+
+        nav ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: white;
+            color: var(--primary-color);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            min-width: 160px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            padding: 120px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #fff9fb, #fff0f5);
+            border-radius: 24px;
+            margin: 80px auto;
+            max-width: 1300px;
+            box-shadow: 0 20px 50px rgba(232, 63, 111, 0.2);
+            overflow: hidden;
+            border: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-text {
+            margin-bottom: 50px;
+        }
+
+        .hero-title {
+            display: inline-block;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #5a2a3a;
+            line-height: 1.3;
+        }
+
+        .hero-highlight {
+            display: inline-block;
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #e83f6f;
+            background: linear-gradient(120deg, #ff7eb9, #e83f6f);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            margin: 0 8px;
+            animation: pulse 2s infinite;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: #7a4a5a;
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 25px auto 0;
+            font-weight: 400;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin-bottom: 60px;
+        }
+
+        .hero-buttons .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 18px 35px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            font-size: 1.1rem;
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #e83f6f, #ff2d6d);
+            color: white;
+            box-shadow: 0 8px 25px rgba(232, 63, 111, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(232, 63, 111, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #e83f6f;
+            border: 2px solid #e83f6f;
+            box-shadow: 0 8px 20px rgba(232, 63, 111, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(232, 63, 111, 0.05);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(232, 63, 111, 0.2);
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(232, 63, 111, 0.1);
+            min-width: 180px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(232, 63, 111, 0.15);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #e83f6f;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: #7a4a5a;
+            font-weight: 500;
+        }
+
+        .hero-decoration {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.15;
+        }
+
+        .circle.pink {
+            width: 300px;
+            height: 300px;
+            background: #e83f6f;
+            top: -100px;
+            right: -100px;
+        }
+
+        .circle.light-pink {
+            width: 400px;
+            height: 400px;
+            background: #ff7eb9;
+            bottom: -150px;
+            left: -150px;
+        }
+
+        .circle.accent-pink {
+            width: 200px;
+            height: 200px;
+            background: #ff2d6d;
+            top: 50%;
+            left: 80%;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Donation Options */
+        .donation-options {
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: var(--dark-color);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            font-size: 18px;
+            color: var(--text-light);
+            margin-bottom: 50px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .option-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        .option-card:nth-child(1) { animation-delay: 0.2s; }
+        .option-card:nth-child(2) { animation-delay: 0.4s; }
+        .option-card:nth-child(3) { animation-delay: 0.6s; }
+
+        .option-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .option-card i {
+            font-size: 60px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .option-card:hover i {
+            transform: scale(1.1);
+        }
+
+        .option-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--dark-color);
+        }
+
+        .option-card p {
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .option-card .btn {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .blood-card {
+            border-top: 4px solid var(--danger-color);
+        }
+
+        .organ-card {
+            border-top: 4px solid var(--accent-color);
+        }
+
+        .money-card {
+            border-top: 4px solid var(--primary-color);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 60px 0;
+            background-color: #fff5f7;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            padding: 30px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+        .feature-card:nth-child(4) { animation-delay: 0.4s; }
+        .feature-card:nth-child(5) { animation-delay: 0.5s; }
+        .feature-card:nth-child(6) { animation-delay: 0.6s; }
+
+        .feature-card:hover {
+            background-color: var(--light-color);
+            transform: translateY(-5px) !important;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card i {
+            font-size: 40px;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover i {
+            transform: rotate(10deg) scale(1.1);
+        }
+
+        .feature-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--dark-color);
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 60px 0;
+            background-color: #fff5f7;
+        }
+
+        .testimonial-slider {
+            max-width: 800px;
+            margin: 40px auto 0;
+            position: relative;
+        }
+
+        .testimonial {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            display: none;
+        }
+
+        .testimonial.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .testimonial img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 20px;
+            border: 4px solid var(--light-color);
+            transition: all 0.3s ease;
+        }
+
+        .testimonial:hover img {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonial p {
+            font-style: italic;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+
+        .testimonial h4 {
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .testimonial .role {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .slider-controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            background-color: #ccc;
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .slider-dot.active {
+            background-color: var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 60px 0 20px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col {
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .footer-col:nth-child(1) { animation-delay: 0.1s; }
+        .footer-col:nth-child(2) { animation-delay: 0.2s; }
+        .footer-col:nth-child(3) { animation-delay: 0.3s; }
+        .footer-col:nth-child(4) { animation-delay: 0.4s; }
+
+        .footer-col h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .footer-col ul li:hover {
+            transform: translateX(5px);
+        }
+
+        .footer-col ul li a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-col ul li a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+
+        .social-links {
+            display: flex;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            margin-right: 10px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-3px) scale(1.1);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bdc3c7;
+            font-size: 14px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            overflow: auto;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 0.3s ease forwards;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-header h2 {
+            color: var(--dark-color);
+            font-size: 24px;
+        }
+
+        .close-modal {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: var(--dark-color);
+            transform: rotate(90deg);
+        }
+
+        .modal-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .modal-option {
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            transform: scale(0.95);
+        }
+
+        .modal-option:hover {
+            transform: translateY(-5px) scale(1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-option a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .modal-option i {
+            font-size: 40px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .modal-option:hover i {
+            transform: scale(1.1);
+        }
+
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            font-size: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            transform: rotate(90deg);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            header {
+                width: 90%;
+                top: 10px;
+                padding: 10px 0;
+            }
+            
+            .header-container {
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 0 20px;
+            }
+
+            .logo {
+                margin-bottom: 0;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav ul li {
+                margin: 10px 0;
+            }
+
+            .hero {
+                padding: 80px 20px;
+                margin: 60px auto;
+                width: 95%;
+            }
+            
+            .hero-title, .hero-highlight {
+                font-size: 2.2rem;
+                display: block;
+                margin: 5px 0;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+                margin-top: 15px;
+            }
+            
+            .hero-buttons {
+                gap: 15px;
+                margin-bottom: 40px;
+            }
+            
+            .btn {
+                padding: 15px 25px;
+                font-size: 1rem;
+            }
+            
+            .hero-stats {
+                gap: 15px;
+            }
+            
+            .stat-item {
+                padding: 20px;
+                min-width: 140px;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 30px;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            nav {
+                display: none;
+                width: 100%;
+                margin-top: 20px;
+            }
+
+            nav.active {
+                display: block;
+                animation: fadeInDown 0.5s ease;
+            }
+
+            .modal-content {
+                width: 90%;
+                margin: 20% auto;
+            }
+
+            .btn {
+                min-width: 140px;
+                padding: 10px 20px;
+                margin: 5px;
+            }
+
+            @keyframes fadeInDown {
+                from { opacity: 0; transform: translateY(-20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo">
+                <i class="fas fa-hands-helping"></i>
+                <span>Social Welfare Connect</span>
+            </a>
+            
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Contact</a></li>
+                    
+                    <div class="auth-buttons" id="authButtons">
+                        <li>
+                            <a href="login.html" class="auth-btn" id="loginBtn">Login</a>
+                        </li>
+                        <li>
+                            <a href="signup.html" class="auth-btn" id="signupBtn">Sign Up</a>
+                        </li>
+                    </div>
+                    
+                    <div class="profile-container" id="profileContainer" style="display: none;">
+                        <div class="profile-info" id="profileBtn">
+                            <img src="" alt="Profile" class="profile-photo" id="profilePhoto">
+                            <span class="profile-name" id="profileName">User</span>
+                        </div>
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <a href="profile.html" class="dropdown-item">
+                                <i class="fas fa-user"></i> My Profile
+                            </a>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-cog"></i> Settings
+                            </a>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>
+                    <span class="hero-title">Spread</span>
+                    <span class="hero-highlight">Kindness</span>
+                    <span class="hero-title">, Create</span>
+                    <span class="hero-highlight">Change</span>
+                </h1>
+                <p class="hero-subtitle">Join a community where compassion meets action. Together we can make a difference.</p>
+            </div>
+            
+            <div class="hero-buttons">
+                <a href="#donationModal" class="btn btn-primary" onclick="openModal('need-help')">
+                    <i class="fas fa-hands-helping"></i> Get Help
+                </a>
+                <a href="#donationModal" class="btn btn-secondary" onclick="openModal('want-to-help')">
+                    <i class="fas fa-heart"></i> Give Help
+                </a>
+            </div>
+            
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number" data-count="12500">0</div>
+                    <div class="stat-label">Lives Touched</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-count="320">0</div>
+                    <div class="stat-label">Active Volunteers</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-count="8450">0</div>
+                    <div class="stat-label">Successful Connections</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="hero-decoration">
+            <div class="circle pink"></div>
+            <div class="circle light-pink"></div>
+            <div class="circle accent-pink"></div>
+        </div>
+    </section>
+    
+    <!-- Donation learnmore options -->
+    <section class="donation-options" id="options">
+        <div class="container">
+            <h2 class="section-title">How You Can Help</h2>
+            <p class="section-subtitle">Choose how you want to contribute to saving lives and making the world a better place</p>
+            
+            <div class="options-grid">
+                <div class="option-card blood-card">
+                    <i class="fas fa-tint"></i>
+                    <h3>Blood Donation</h3>
+                    <p>Register as a blood donor or find donors in emergencies. Your single donation can save up to 3 lives.</p>
+                    <a href="/blood-donation.html" class="btn">Learn More</a>
+                </div>
+                
+                <div class="option-card organ-card">
+                    <i class="fas fa-heartbeat"></i>
+                    <h3>Organ Donation</h3>
+                    <p>Pledge your organs to give someone a second chance at life. Register as an organ donor today.</p>
+                    <a href="/organ-donation.html" class="btn">Learn More</a>
+                </div>
+                
+                <div class="option-card money-card">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <h3>Monetary Donation</h3>
+                    <p>Support verified NGOs and their causes with financial contributions. Every penny makes a difference.</p>
+                    <a href="/monetary-donation.html" class="btn">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">Our Platform Features</h2>
+            <p class="section-subtitle">Designed to make the process of giving and receiving help as seamless as possible</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-search-location"></i>
+                    <h3>Donor Search</h3>
+                    <p>Quickly find nearby donors based on blood group, organ type, or location with our advanced search system.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-bell"></i>
+                    <h3>Emergency Alerts</h3>
+                    <p>Send urgent requests to registered donors in your area during critical situations with just one click.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Verified Profiles</h3>
+                    <p>All donors and NGOs are thoroughly verified with medical documentation for trust and safety.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h3>Event Management</h3>
+                    <p>NGOs can organize donation camps and events, while volunteers can easily sign up to help.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Impact Tracking</h3>
+                    <p>See the real-world impact of your contributions with detailed reports and analytics.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-comments"></i>
+                    <h3>Community Support</h3>
+                    <p>Connect with other donors, volunteers, and recipients through our supportive community forums.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <h2 class="section-title">Stories of Hope</h2>
+            <p class="section-subtitle">Hear from those whose lives have been changed through our platform</p>
+            
+            <div class="testimonial-slider">
+                <div class="testimonial active">
+                    <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Sarah Johnson">
+                    <p>"When my father needed an urgent kidney transplant, this platform connected us with a matching donor within days. The verification process gave us confidence, and today my father is healthy again."</p>
+                    <h4>Sarah Johnson</h4>
+                    <p class="role">Daughter of a recipient</p>
+                </div>
+                
+                <div class="testimonial">
+                    <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Raj Patel">
+                    <p>"As an NGO working in rural healthcare, finding blood donors was always challenging. This platform has revolutionized our ability to save lives during emergencies."</p>
+                    <h4>Raj Patel</h4>
+                    <p class="role">NGO Director</p>
+                </div>
+                
+                <div class="testimonial">
+                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Maria Garcia">
+                    <p>"I've been donating blood for years, but this platform makes it so easy to be notified when my blood type is needed nearby. The impact is immediate and tangible."</p>
+                    <h4>Maria Garcia</h4>
+                    <p class="role">Regular Blood Donor</p>
+                </div>
+                
+                <div class="slider-controls">
+                    <div class="slider-dot active" onclick="showTestimonial(0)"></div>
+                    <div class="slider-dot" onclick="showTestimonial(1)"></div>
+                    <div class="slider-dot" onclick="showTestimonial(2)"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>About Us</h3>
+                    <p>Social Welfare Connect is a platform dedicated to bridging the gap between those in need and those willing to help through blood, organ, and monetary donations.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#testimonials">Testimonials</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Donation Types</h3>
+                    <ul>
+                        <li><a href="#blood">Blood Donation</a></li>
+                        <li><a href="#organ">Organ Donation</a></li>
+                        <li><a href="#money">Monetary Donation</a></li>
+                        <li><a href="#volunteer">Volunteer</a></li>
+                        <li><a href="#events">Events</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Helping St, Compassion City</li>
+                        <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@socialwelfareconnect.org</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2023 Social Welfare Connect. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal for Donation Options -->
+    <div id="donationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Choose Donation Type</h2>
+                <span class="close-modal" onclick="closeModal()">×</span>
+            </div>
+            <div class="modal-options" id="modalOptions">
+                <!-- Options will be populated dynamically based on button clicked -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle between auth buttons and profile dropdown
+        const authButtons = document.getElementById('authButtons');
+        const profileContainer = document.getElementById('profileContainer');
+        const profileBtn = document.getElementById('profileBtn');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        const menuToggle = document.querySelector('.menu-toggle');
+        const nav = document.querySelector('nav');
+        
+        let isLoggedIn = false;
+        
+        // Check if user is already logged in
+        function checkAuthStatus() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                isLoggedIn = true;
+                // Update profile name
+                const profileName = document.getElementById('profileName');
+                const profilePhoto = document.getElementById('profilePhoto');
+                if (profileName) {
+                    profileName.textContent = currentUser.name;
+                }
+                if (profilePhoto) {
+                    profilePhoto.src = currentUser.profilePhoto || 'https://via.placeholder.com/50';
+                }
+                toggleAuthUI();
+            }
+        }
+        
+        function toggleAuthUI() {
+            if (isLoggedIn) {
+                authButtons.style.display = 'none';
+                profileContainer.style.display = 'flex';
+            } else {
+                authButtons.style.display = 'flex';
+                profileContainer.style.display = 'none';
+            }
+        }
+        
+        // Logout function
+        function logout() {
+            localStorage.removeItem('currentUser');
+            isLoggedIn = false;
+            toggleAuthUI();
+            dropdownMenu.classList.remove('show');
+        }
+        
+        profileBtn?.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dropdownMenu.classList.toggle('show');
+        });
+
+        document.addEventListener('click', function() {
+            dropdownMenu?.classList.remove('show');
+        });
+        
+        menuToggle.addEventListener('click', function() {
+            nav.classList.toggle('active');
+        });
+        
+        // Add logout functionality to dropdown
+        document.querySelector('.dropdown-item[href="#"]:last-child')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            logout();
+        });
+        
+        // Check auth status on page load
+        checkAuthStatus();
+        toggleAuthUI();
+
+        // Modal functions
+        function openModal(type) {
+            if (!isLoggedIn) {
+                alert('Please login with your registered account to continue.');
+                window.location.href = 'login.html';
+                return;
+            }
+            const modal = document.getElementById('donationModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalOptions = document.getElementById('modalOptions');
+            
+            if (type === 'need-help') {
+                modalTitle.textContent = "What type of help do you need?";
+                modalOptions.innerHTML = `
+                    <div class="modal-option blood-card">
+                        <a href="bloodreceiver.html">
+                            <i class="fas fa-tint"></i>
+                            <h3>Blood</h3>
+                            <p>Find blood donors</p>
+                        </a>
+                    </div>
+                    <div class="modal-option organ-card">
+                        <a href="organreceiver.html">
+                            <i class="fas fa-heartbeat"></i>
+                            <h3>Organ</h3>
+                            <p>Find organ matches</p>
+                        </a>
+                    </div>
+                    <div class="modal-option money-card">
+                        <a href="moneyreceiver.html">
+                            <i class="fas fa-hand-holding-usd"></i>
+                            <h3>Money</h3>
+                            <p>Request financial support</p>
+                        </a>
+                    </div>
+                `;
+            } else if (type === 'want-to-help') {
+                modalTitle.textContent = "How would you like to help?";
+                modalOptions.innerHTML = `
+                    <div class="modal-option blood-card">
+                        <a href="blooddonor.html">
+                            <i class="fas fa-tint"></i>
+                            <h3>Blood</h3>
+                            <p>Donate blood</p>
+                        </a>
+                    </div>
+                    <div class="modal-option organ-card">
+                        <a href="organdonor.html">
+                            <i class="fas fa-heartbeat"></i>
+                            <h3>Organ</h3>
+                            <p>Register as organ donor</p>
+                        </a>
+                    </div>
+                    <div class="modal-option money-card">
+                        <a href="moneydonor.html">
+                            <i class="fas fa-hand-holding-usd"></i>
+                            <h3>Money</h3>
+                            <p>Donate to causes</p>
+                        </a>
+                    </div>
+                `;
+            }
+            
+            modal.style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById('donationModal').style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('donationModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Testimonial Slider
+        let currentTestimonial = 0;
+        const testimonials = document.querySelectorAll('.testimonial');
+        const dots = document.querySelectorAll('.slider-dot');
+        
+        function showTestimonial(index) {
+            testimonials.forEach(testimonial => testimonial.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            currentTestimonial = index;
+            testimonials[currentTestimonial].classList.add('active');
+            dots[currentTestimonial].classList.add('active');
+        }
+        
+        setInterval(() => {
+            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+            showTestimonial(currentTestimonial);
+        }, 5000);
+
+        // Animated counter for stats
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-number');
+            const speed = 200;
+            
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-count');
+                let count = +counter.innerText;
+                const increment = target / speed;
+                
+                function updateCount() {
+                    if (count < target) {
+                        count += increment;
+                        counter.innerText = Math.ceil(count).toLocaleString();
+                        setTimeout(updateCount, 1);
+                    } else {
+                        counter.innerText = target.toLocaleString();
+                    }
+                }
+                
+                if (count < target) {
+                    updateCount();
+                }
+            });
+        }
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        observer.observe(document.querySelector('.hero'));
+
+        // Animate elements when they come into view
+        const animateOnScroll = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                    animateOnScroll.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.option-card, .feature-card, .footer-col').forEach(el => {
+            animateOnScroll.observe(el);
+        });
+    </script>
+</body>
+</html>
